@@ -115,7 +115,7 @@ especial euclidiano de ordem 3 (\(SE(3)\)) onde vemos claramente que \(SE(3) =
 
 Seja \(R_1^0\) a matriz de rotação que especifica a orientação do sistema de
 coordenadas \(\{1\}\) com relação ao sistema de coordenadas \(\{0\}\) e
-\(o_1^0\) o vetor de deslocamento une suas origens. Como visto na seção
+\(o_1^0\) o vetor de deslocamento une suas origens. Como visto ne seção
 anterior, se \(P\) é um ponto fixado ao sistema de coordenadas \(\{1\}\) com
 coordenadas locais dadas por \(p^1\) então, podemos expressar as coordenadas de
 \(P\) com relação ao sistema de coordenadas \(\{0\}\) usando o seguinte
@@ -646,7 +646,7 @@ onde a i-ésima coluna \(J_{\omega_i}\) é dada por:
 
 Note que o cálculo da jacobiana torna-se possível apenas com o conhecimento da
 função de cinemática direta \(T_n^0\) mostrando-se uma maneira simples e
-sistemática para calcular não só a velocidade do efetuador final mas também a
+sistemática para calcular não so a velocidade do efetuador final mas também a
 velocidade de qualquer ponto da estrutura cinemática do manipulador.
 
 Como exemplo, considere o manipulador planar 3R introduzido na seção anterior.
@@ -723,7 +723,7 @@ jacobiana:
     \xi = J_1 \dot{q_1} + J_2 \dot{q_2} + \cdots + J_n \dot{q_n}
 \end{equation}
 
-Uma vez que \(\xi \in \mathbb{R}^6\) o manipulador só conseguirá desempenhar
+Uma vez que \(\xi \in \mathbb{R}^6\) o manipulador so conseguirá desempenhar
 uma velocidade arbitrária se todas as colunas de \(J\) forem linearmente
 independentes, ou seja, quando o posto da matriz jacobiana for igual a \(6\).
 Para uma matriz \(J \in \mathbb{R}^{6 \times n}\) é sempre verdade que
@@ -939,7 +939,7 @@ singulares de \(J\). Por fim, ao fazermos a substituição \(w = U^\top \xi\) po
 
 evidenciado que o disco é mapeado num elipsoide com eixos alinhados a um
 sistema de coordenadas rotacionado por \(U^\top\). No sistema de coordenadas
-original, os semieixos do elipsoide são dados pelos vetores \(\sigma_i u_i\).
+original, os semi-eixos do elipsoide são dados pelos vetores \(\sigma_i u_i\).
 
 A medida de manipulabilidade \(\mu\) é definida como o produto dos valores
 singulares de \(J\):
@@ -970,7 +970,7 @@ dissemos que o vetor \(\dot{q_0}\) pode ser escolhido arbitrariamente. Uma
 possibilidade é tomá-lo de forma a maximar algum índice de performance \(w\),
 para isso escolhendo o vetor na direção do gradiente:
 
-\begin{equation}
+\begin{equation}\label{eq:metric-gradient}
     \dot{q_0} = k_0 {\left( \frac{\partial w(q)}{\partial q} \right)}^\top
 \end{equation}
 
@@ -1001,7 +1001,7 @@ central de atuação de cada junta, evitando assim configurações singulares no
 limite do espaço de trabalho. Além disso, o vetor gradiente pode ser calculado
 de maneira analítica onde cada coordenada é dada por:
 
-\begin{equation}
+\begin{equation}\label{eq:joint-distance-grad}
     \frac{\partial w(q)}{\partial q_i} = -\frac{1}{n} \frac{q_i - \bar{q_i}}{{(q_{iM} - q_{im})}^2}
 \end{equation}
 
@@ -1012,7 +1012,7 @@ isso pode levar até mesmo uma diminuição ou até mesmo não convergência do 
 de \(w\) devido a oscilações em torno do ponto de máximo local.
 
 No próximo capítulo, iremos aplicar os conceitos apresentados até agora na
-concepção de um ambiente simulado para um manipulador redundante com cinco
+conecepção de um ambiente simulado para um manipulador redundante com cinco
 graus de liberdade. O objetivo principal será a execução de trajetórias
 retilíneas no espaço de trabalho \(\mathcal{T} \in \text{SE}(3)\) que levam
 apenas em consideração a posição do efetuador e com isso explorar a resolução

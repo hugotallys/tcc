@@ -43,9 +43,9 @@ aplicações relacionadas à robótica como \emph{Robotics Toolbox for
     Python}~\cite{rtb}. O simulador escolhido foi o Webots~\cite{webots} devido a
 possibilidade de prototipar o modelo virtual do manipulador do zero aliado a
 testes rápidos de diversos designs. Além disso, o Webots oferece suporte
-oficial ao ROS2, o que permitiu a implementação de um sistema modularizado,
-onde cada componente executa uma tarefa específica, facilitando a manutenção e
-a extensão do mesmo, inclusive para o interfaceamento com um robô real.
+oficial ao ROS, o que permitiu a implementação de um sistema modularizado, onde
+cada componente executa uma tarefa específica, facilitando a manutenção e a
+extensão do mesmo, inclusive para o interfaceamento com um robô real.
 
 \begin{figure}
     \centering
@@ -151,14 +151,14 @@ dispositivo como o motor.
 A comunicação do controlador com o ambiente simulado do robô foi feita através
 do uso do framework ROS, que consiste num conjunto de bibliotecas e pacotes de
 software que facilitam a troca de mensagens entre diferentes componentes de um
-sistema robótico. O próprio simulador Webots oferece suporte nativo ao ROS2,
-com uma documentação detalhada de como configurar um projeto e o uso básico de
+sistema robótico. O próprio simulador Webots oferece suporte nativo ao ROS, com
+uma documentação detalhada de como configurar um projeto e o uso básico de
 troca de mensagens entre diferentes processos.
 
-A arquitetura do ROS2 é baseada em uma estrutura de grafo, onde nós representam
-processos individuais que interagem com outros nós recebendo e enviando
-mensagens, através de tópicos. Idealmente, um nó deve ser responsável por uma
-única tarefa modular, como controlar os motores do robô ou enviar dados
+A arquitetura de comunicação do ROS é baseada em uma estrutura de grafo, onde
+nós representam processos individuais que interagem com outros nós recebendo e
+enviando mensagens, através de tópicos. Idealmente, um nó deve ser responsável
+por uma única tarefa modular, como controlar os motores do robô ou enviar dados
 coletados por um sensor de distância.
 
 Os tópicos são os canais pelos quais os nós trocam mensagens e seguem um modelo
@@ -168,30 +168,32 @@ anônima. As mensagens passadas nos tópicos podem variar amplamente e geralment
 são definidas pelo usuário, cobrindo dados de sensores, comandos de controle de
 motores, informações de estado, comandos de atuadores entre outros.
 
-\subsection*{ROS2 Actions}
+\subsection*{Serviços e Ações no ROS}
 
-As ações do ROS2 expandem as capacidades do Sistema Operacional de Robôs,
-proporcionando uma maneira de executar tarefas longas e orientadas a objetivos.
-Ao contrário dos tópicos, que são adequados para passagem simples de mensagens,
-as ações são projetadas para interações mais complexas, como mover um robô para
-uma localização específica ou executar uma sequência de ações. As ações
-consistem em três componentes principais: o objetivo, o resultado e o feedback.
-O cliente envia um objetivo para o servidor, que então executa a ação
-solicitada. Durante a execução, o servidor pode fornecer feedback ao cliente
-para mantê-lo informado sobre o progresso. Uma vez concluída a ação, o servidor
-envia um resultado de volta ao cliente. Este padrão de comunicação assíncrona
-permite o manuseio robusto de tarefas que podem levar algum tempo para serem
-concluídas, proporcionando melhor controle e monitoramento do sistema como um
-todo. As ações do ROS2 são uma ferramenta poderosa para construir aplicativos
-robóticos avançados, permitindo que os robôs executem tarefas complexas com
-precisão e eficiência.
+Serviços e ações constituem outras formas de comunicação entre nós no grafo do
+ROS e implmentam uma abordagem de troca de mensagens do tipo cliente/servidor.
+Serviços representam ações que um nó pode executar com um início e fim
+definidos, resultando em um único resultado são normalmente usados para tarefas
+que possuem requisição e retorno, como por exemplo capturar uma imagem de um
+único quadro, dispensando o processamento contínuo. Por outro lado, ações são
+destinadas a tarefas de longa duração e são construídas com base em diferentes
+tópicos e serviços. Ações consistem em três partes: um objetivo, um
+\emph{feedback} e um resultado. Um nó do tipo cliente de ação envia um objetivo
+para um nó servidor de ação, que reconhece a requisição, retorna um fluxo
+continua de dados através de um feedback até que a ação seja conlcuída ou
+cancelada, quando por fim retorna um resultado.
 
-\subsection*{Grafo de comunicação no ROS2}
+\subsection*{Grafo de comunicação no ROS}
 
+Com o objetivo de se executar trajetórias no espaço de trabalho do manipulador,
+a arquitetura de comunicação foi projetada de modo especificar um objetivo
+através de uma ação do tipo \textbf{trajectory\_action} (nós
+\emph{trajectory\_action\_server} e \emph{trajectory\_action\_client}) e
+controlar o manipulador (nós \emph{snake\_driver} e \emph{snake\_controller}).
 A arquitetura de comunicação proposta para o controle do manipulador é
 ilustrada no grafo da figura~\ref{fig:coms_arch}, onde temos nós, tópicos e
 ações associados a execução de uma trajetória. A seguir temos uma breve
-descrição do funcionamento de cada nó:
+descrição do funcionamento de cada nó.
 
 \begin{itemize}
     \item \textbf{snake\_driver} {-} Nó instânciado pelo simulador responsável por controlar os motores do manipulador.
@@ -200,7 +202,7 @@ descrição do funcionamento de cada nó:
           que se comunique com um robô real, bastando que a interface de comunicação seja mantida, garantindo uma transferência natural do ambiente simulado para testes físicos.
 
     \item \textbf{snake\_controller} {-} Nó responsável por implementar a lógica de controle do manipulador. Este nó está inscrito/publica nos dois tópicos
-          \texttt{target\_joint\_states} e \texttt{joint\_states} anteriores para interação com o \emph{driver} do manipulador. Além disso, se inscreve
+          anteriores para interação com o \emph{driver} do manipulador. Além disso, se inscreve
           num tópico \texttt{rrc\_input}, recebendo parâmetros de controle do algoritmo~\ref{rrc-alg} e publica no tópico \texttt{rrc\_output} dados
           relativos à posição do efetuador final e métricas de desempenho.
 
@@ -214,17 +216,35 @@ descrição do funcionamento de cada nó:
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{./Images/com-arch.png}
+    \includegraphics[width=0.7\textwidth]{./Images/com-arch.png}
     \caption{Arquitetura de comunicação proposta para controle do manipulador.}\label{fig:coms_arch}
 \end{figure}
 
 \section{O Algoritmo \emph{Resolved Rate Control}}
 
+Para realizar o controle da trajetória do manipulador e também a resolução da
+redundância, foi utilizado o esquema de controle \emph{Resolved Rate Control}
+definido no capítulo anterior. A figura~\ref{fig:block-diagram} ilustra o
+diagrama de blocos do controlador RRC implementado pelo nó
+\emph{snake\_controller}. Dada uma taxa de variação da posição do efetuador
+final \(\xi\) e um vetor de velocidades das juntas \(\dot{q_0}\), o controlador
+atua atualizando a configuração do manipulador de acordo com a
+equação~\ref{eq:pseudo-inverse}.
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{./Images/control-scheme.png}
+    \includegraphics[width=0.6\textwidth]{./Images/control-scheme.png}
     \caption{Diagrama de blocos do controlador RRC}\label{fig:block-diagram}
 \end{figure}
+
+Para a realização dos experimentos, foi implementado o algoritmo~\ref{rrc-alg}
+que escolhe o vetor \(\dot{q_0}\) de acordo com o gradiente dado pela
+equação~\ref{eq:metric-gradient}. As duas métricas apresentadas anteriormente
+forma calculadas: \emph{distância para os limites mecânicos das juntas} e
+\emph{medida de manipulabilidade de Yoshikawa}. No primeiro caso, o gradiente é
+calculado analiticamente de acordo com a equação~\ref{eq:joint-distance-grad}.
+Já para a manipulabilidade, o gradiente é estimado numericamente através de
+diferenças finitas, considerando um passo \(h\) suficientemente pequeno.
 
 \begin{algorithm}
     \caption{\emph{Resolved Rate Controller} {-} Atualizando o estado das juntas}\label{rrc-alg}
@@ -254,19 +274,7 @@ descrição do funcionamento de cada nó:
         \EndProcedure\end{algorithmic}
 \end{algorithm}
 
-\section{Experimentos}
-
-cenário 1 -> q0 == qf (variação de métrica controla o tempo de execução)
-
-cenário 2 -> q0 != qf (erro da posição e variação de métrica controla o tempo
-de execução)
-
-cenário 3 -> q0 != qf com q0 ~ N(0, 0.1) (erro da posição e variação de métrica
-controla o tempo de execução) repetir 100x
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\textwidth]{./Images/exp-flow.png}
-    \caption{Etapas seguidas em cada execução de uma \textbf{trajectory\_action}.}\label{fig:exp-flow}
-\end{figure}
-
+No próximo capítulo, iremos descrever as etapas definidas ao longo dos
+experimentos de execução das trajetórias e avaliar a eficácia do esquema de
+controle proposto na otimização da configuração do manipulador em diferentes
+cenários.
