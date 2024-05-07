@@ -115,7 +115,7 @@ especial euclidiano de ordem 3 (\(SE(3)\)) onde vemos claramente que \(SE(3) =
 
 Seja \(R_1^0\) a matriz de rotação que especifica a orientação do sistema de
 coordenadas \(\{1\}\) com relação ao sistema de coordenadas \(\{0\}\) e
-\(o_1^0\) o vetor de deslocamento une suas origens. Como visto ne seção
+\(o_1^0\) o vetor de deslocamento une suas origens. Como visto na seção
 anterior, se \(P\) é um ponto fixado ao sistema de coordenadas \(\{1\}\) com
 coordenadas locais dadas por \(p^1\) então, podemos expressar as coordenadas de
 \(P\) com relação ao sistema de coordenadas \(\{0\}\) usando o seguinte
@@ -306,7 +306,11 @@ dos frames em cada elo:
     \item (\textbf{DH2}) $x_i$ é perpendicular o eixo $z_{i-1}$
 \end{itemize}
 
-adicionar figura dh
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{Images/dh-assignment.png}
+    \caption{Atribuição de \emph{frames} de acordo com a convenção de Denavit-Hartenberg. Adaptado de~\cite{spong_robot_2020}.}\label{fig:dh-assignment}
+\end{figure}
 
 O cálculo da matriz $A_i$ fica condicionado à determinação dos parâmetros:
 $\theta_i$ (joint angle), $d_i$ (link offset), $a_i$ (link length) e $\alpha_i$
@@ -357,15 +361,15 @@ a definição de cada parâmetro de Denavit-Hartenberg.
     \centering
     \begin{tabular}{c c}
         \toprule
-        \textbf{Parâmetro} & \textbf{Definição}                                                                                                 \\
+        \textbf{Parâmetro} & \textbf{Definição}                                                                                             \\
         \midrule
-        $\theta_i$         & \makecell[l]{O ângulo entre os eixos $\mathbf{x}_i$ e $\mathbf{x}_{i+1}$ em torno do eixo $\mathbf{z}_{i-1}$}      \\
+        $\theta_i$         & \makecell[l]{O ângulo entre os eixos $\mathbf{x}_{i-1}$ e $\mathbf{x}_i$ em torno do eixo $\mathbf{z}_{i-1}$}  \\
         \midrule
-        $d_i$              & \makecell[l]{A distância da origem do sistema de coordenadas $\{i\}$                                               \\ até o eixo $\mathbf{x}_{i+1}$ ao longo do eixo $\mathbf{z}_i$} \\
+        $d_i$              & \makecell[l]{A distância da origem do sistema de coordenadas $\{i-1\}$                                         \\ até o eixo $\mathbf{x}_i$ ao longo do eixo $\mathbf{z}_{i-1}$} \\
         \midrule
-        $a_i$              & \makecell[l]{A distância entre os eixos $\mathbf{z}_i$ e $\mathbf{z}_{i+1}$ ao longo do eixo $\mathbf{x}_{i+1}$;   \\ para eixos que se intersectam, é paralela a $\mathbf{z}_i \times \mathbf{z}_{i+1}$} \\
+        $a_i$              & \makecell[l]{A distância entre os eixos $\mathbf{z}_{i-1}$ e $\mathbf{z}_i$ ao longo do eixo $\mathbf{x}_i$;   \\ para eixos que se intersectam, é paralela a $\mathbf{z}_{i-1} \times \mathbf{z}_i$} \\
         \midrule
-        $\alpha_i$         & \makecell[l]{O ângulo entre o eixo $\mathbf{z}_i$ e o eixo $\mathbf{z}_{i+1}$ em torno do eixo $\mathbf{x}_{i+1}$} \\
+        $\alpha_i$         & \makecell[l]{O ângulo entre o eixo $\mathbf{z}_{i-1}$ e o eixo $\mathbf{z}_i$ em torno do eixo $\mathbf{x}_i$} \\
         \bottomrule
     \end{tabular}
     \caption{Descrição dos parâmetros Denavit-Hartenberg}\label{tab:dh-parameters}
@@ -405,7 +409,7 @@ equação~\ref{eq:dh-matrix}:
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\linewidth]{Images/3r-planar.pdf} % Adjust the width as needed
+    \includegraphics[width=0.8\linewidth]{Images/3r-planar.pdf}
     \caption{Braço planar do tipo 3R.}\label{fig:3r-planar-arm}
 \end{figure}
 
@@ -642,7 +646,7 @@ onde a i-ésima coluna \(J_{\omega_i}\) é dada por:
 
 Note que o cálculo da jacobiana torna-se possível apenas com o conhecimento da
 função de cinemática direta \(T_n^0\) mostrando-se uma maneira simples e
-sistemática para calcular não so a velocidade do efetuador final mas também a
+sistemática para calcular não só a velocidade do efetuador final mas também a
 velocidade de qualquer ponto da estrutura cinemática do manipulador.
 
 Como exemplo, considere o manipulador planar 3R introduzido na seção anterior.
@@ -719,7 +723,7 @@ jacobiana:
     \xi = J_1 \dot{q_1} + J_2 \dot{q_2} + \cdots + J_n \dot{q_n}
 \end{equation}
 
-Uma vez que \(\xi \in \mathbb{R}^6\) o manipulador so conseguirá desempenhar
+Uma vez que \(\xi \in \mathbb{R}^6\) o manipulador só conseguirá desempenhar
 uma velocidade arbitrária se todas as colunas de \(J\) forem linearmente
 independentes, ou seja, quando o posto da matriz jacobiana for igual a \(6\).
 Para uma matriz \(J \in \mathbb{R}^{6 \times n}\) é sempre verdade que
@@ -935,7 +939,7 @@ singulares de \(J\). Por fim, ao fazermos a substituição \(w = U^\top \xi\) po
 
 evidenciado que o disco é mapeado num elipsoide com eixos alinhados a um
 sistema de coordenadas rotacionado por \(U^\top\). No sistema de coordenadas
-original, os semi-eixos do elipsoide são dados pelos vetores \(\sigma_i u_i\).
+original, os semieixos do elipsoide são dados pelos vetores \(\sigma_i u_i\).
 
 A medida de manipulabilidade \(\mu\) é definida como o produto dos valores
 singulares de \(J\):
@@ -1007,9 +1011,10 @@ otimização pode se tornar muito lento, enquanto que se \(k_0\) for muito grand
 isso pode levar até mesmo uma diminuição ou até mesmo não convergência do valor
 de \(w\) devido a oscilações em torno do ponto de máximo local.
 
-No próximo capítulo, iremos utilizar os conceitos apresentados até agora na
-concepção de um simulador minimalista do manipulador planar 3R denominado
-\emph{Snakesim}. O objetivo principal será explorar a resolução de redundância
-presente na execução de trajetórias cartesianas no plano \(xy\) do espaço de
-trabalho para maximizar os índices tanto de manipulabilidade quanto de distância
-para os limites das juntas introduzidos nessa seção.
+No próximo capítulo, iremos aplicar os conceitos apresentados até agora na
+concepção de um ambiente simulado para um manipulador redundante com cinco
+graus de liberdade. O objetivo principal será a execução de trajetórias
+retilíneas no espaço de trabalho \(\mathcal{T} \in \text{SE}(3)\) que levam
+apenas em consideração a posição do efetuador e com isso explorar a resolução
+de redundância para otimizar diferentes índices relacionados a configuração do
+manipulador durante a execução da trajetória.
