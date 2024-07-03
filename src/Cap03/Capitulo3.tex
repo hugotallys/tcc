@@ -274,7 +274,51 @@ diferenças finitas, considerando um passo \(h\) suficientemente pequeno.
         \EndProcedure\end{algorithmic}
 \end{algorithm}
 
-No próximo capítulo, iremos descrever as etapas definidas ao longo dos
-experimentos de execução das trajetórias e avaliar a eficácia do esquema de
-controle proposto na otimização da configuração do manipulador em diferentes
-cenários.
+\subsection*{Experimentos}
+
+Os experimentos focaram na avaliação da resolução de redundância
+sob valores variados do ganho (\(k_0\)) e envolveram dois cenários. No primeiro
+cenário, o manipulador foi controlado de modo a otimizar a distância para o limite mecânico das juntas, 
+executando movimentos internos no seu espaço nulo, mantendo a posicação do efetuador final \(E_0\) estacionária.
+No segundo cenário, além de movimentos internos para otimizar seu índice de manipulabilidade, o manipulador 
+seguiu uma trajtória cartesiana entre a posicação atual \(E_0\) e um outro ponto no seu espaço 
+de trabalho \(E_f\). Os índices de desempenho, configuração das juntas e a 
+posicação do efetuador final foram registrados na simulação de modo a se avaliar 
+a eficácia do esquema da resolução de redundância na execução de tais experimentos.
+
+Em cada iteração do \emph{loop de trajetória}, o vetor de velocidade é calculado e 
+fornecido como entrada para o controlador RRC. A execução da trajetória para sempre 
+que o número máximo de iterações é atingido (em ambos os cenários, definido como 500) ou 
+se a norma do vetor de erro de posição se torna menor que 0,01 (apenas no segundo cenário). 
+Para avaliar o desempenho em cada trajetória, calculamos a pontuação:
+
+\begin{equation}
+	I(w) = \int_0^t {|w(q(\tau))| \ d\tau}
+\end{equation}
+	
+a fim de capturar informações não apenas sobre o estado final da trajetória, mas também ao 
+longo de toda a sua execução.
+
+O fluxograma da figura \ref*{fig:exp-flow} detalha o processo geral para a execução das 
+trajetórias do manipulador robótico. Inicialmente, são escolhidas duas configurações 
+\((q_0\) e \(q_f\)). Em seguida, calcula-se as posições iniciais e finais (\(E_0\) e 
+\(E_f\)) do efetuador final em ambas as configurações. Verifica-se se há colisão com 
+o chão (plano $z=0$): caso positivo, retorna-se à escolha das configurações. Se não há 
+colisão, escolhe-se um ganho \(k_0\) e calcula-se o erro de posição \(\xi\). Avalia-se 
+se há condições de parada da trajetória; se sim, os resultados são salvos e a trajetória 
+é reiniciada com um novo ganho \(k_0\). Se não, atualiza-se \(E_0\) conforme o RRC
+e o processo continua até não haver mais ganhos \(k_0\) para escolher, concluindo o 
+experimento.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{./Images/exp-flow.png}
+	\caption{Etapas seguidas na execução de um experimento.}\label{fig:exp-flow}
+\end{figure}
+
+Vale ressaltar que devido a natureza complexa da determinação do espaço 
+de trabalho do manipulador, procurou-se simplesmente escolher 
+os pontos inicias e finais de modo que sejam posições atingíveis, deixando a 
+cargo do controlador a execução da melhor trajetória cartesiana entre os dois pontos.
+Além disso, a escolha de tais pontos foi feita de maneira aleatória ao longo de disversos experimentos
+de modo a não privilegiar nenhuma configuração específica do manipulador.

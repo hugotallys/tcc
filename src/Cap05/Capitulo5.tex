@@ -1,1 +1,18 @@
 \chapter{Conclusão}\label{cap:conclusao}
+
+Neste trabalho, discutimos a aplicação de esquemas de controle com resolução de 
+redundância para abordar os desafios impostos pelas singularidades na cinemática 
+diferencial inversa de um manipulador serial com cinco graus de liberdade. Foi proposto ambiente completamente
+simulado para testar e validar a estratégia de controle, proporcionando também uma comunicação robusta 
+entre controlador e o modelo virtual do manipulador usando o Sistema Operacional de Robôs (ROS). 
+A abordagem foi avaliada em cenários distintos, propiciando uma análise qualitativa da execução de
+trajetórias em diferentes condições de restrições cinemáticas e de desempenho do manipulador.
+
+Perspectivas futuras para o trabalho, incluem o estudo da escolha ótima de um ganho \(k_0\), visando otimizar 
+o desempenho do manipulador em diferentes cenários e também uma análise estatística mais aprofundada dos resultados obtidos, com o objetivo de avaliar a robustez do
+controlador e a convergência para soluções ótimas. Além disso, é desejável explorar cadeias cinemáticas 
+mais complexas, como as dos manipuladores do tipo \emph{elbow} e \emph{wrist}, que possuem um maior 
+grau de redundância tipicamente maior que 7, permitindo a resolução não so a nível do controle da posição, mas 
+tamém da orientação do efetuador final. Vale ressaltar também que uma continuidade natural para o trabalho 
+é a transferência dos resultados para um robô real e a integração em um \emph{framework} de planejamento de trajetórias, permitindo
+a validação do esquema de controle em cenários mais realistas e desafiadores.
