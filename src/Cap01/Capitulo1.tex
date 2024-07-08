@@ -1,18 +1,18 @@
 \chapter{Introdução}\label{cap:introduction}
 
-A redundância robótica refere-se ao uso de graus adicionais de liberdade (DOF) além do mínimo necessário para uma determinada tarefa.
-No contexto de robôs industriais e manipuladores, é importante abordar e resolver questões relacionadas às singularidades, que
-ocorrem quando a configuração de um robô leva à perda de mobilidade, a um número infinito de possíveis configurações e a grandes
-velocidades no espaço das juntas, dadas pequenas velocidades no espaço de trabalho. Em relação ao desempenho da tarefa, as singularidades
-podem resultar em comportamento indefinido ou imprevisível do robô.
+A redundância cinemática na robótica, refere-se ao uso de graus liberdade (DOF) adicionais 
+além do mínimo necessário para uma executar determinada tarefa. No contexto de robôs industriais e manipuladores,
+é importante abordar e resolver problemas relacionados às \emph{singularidades cinemáticas}, que ocorrem quando a 
+configuração de um robô leva à perda de um ou mais DOFs, ocasionando a redução da destreza do manipulador. Em relação 
+à cinemática inversa diferencial de manipuladores, as singularidades resultam em comportamento indefinido ou imprevisível do robô,
+tendo em vista o número infinito de configurações que existem para uma dada pose do efetuador final.
 
 A importância da redundância robótica na solução de singularidades reside na sua capacidade de fornecer caminhos alternativos
 para o planejamento de movimentos. Ao ter DOFs extras, um robô pode manobrar ao redor de configurações singulares, mantendo a
 eficiência operacional e a segurança. Essa flexibilidade garante que o robô possa continuar executando suas tarefas mesmo ao
-se aproximar ou operar perto de pontos singulares, que são tipicamente inevitáveis em tarefas complexas. Além disso, a redundância
-permite a otimização de outros critSérios de desempenho, como minimizar o consumo de energia, reduzir o desgaste, melhorar a
-precisão e aumentar as capacidades de evasão de obstáculos. Portanto, a redundância robótica não apenas resolve problemas de
-singularidade, mas também melhora a robustez e a versatilidade geral dos sistemas robóticos.
+se aproximar ou operar perto de pontos singulares, que são tipicamente inevitáveis em tarefas complexas. Além disso, 
+a resolução redundância permite a otimização de outros critérios de desempenho, como minimizar o consumo de energia, reduzir o desgaste, melhorar a
+precisão e aumentar as capacidades de evasão de obstáculos.
 
 Recentemente, \cite{li2023pseudo} propuseram um esquema baseado em pseudo-inversa para controle de movimento em nível de aceleração,
 demonstrando a viabilidade do método através de simulações com o manipulador robótico PA10. Por outro lado, \cite{kuri2023som}
@@ -30,6 +30,26 @@ simulação quanto comandos para robôs reais para implementar as técnicas. Fin
 desempenho dos cenários experimentais enquanto alteramos os parâmetros do controlador.
 
 \section{Motivação}\label{sec:motivation}
+
+%%%% WARN CHATGPT COPY
+
+A abordagem tradicional no projeto de manipuladores teve como foco principal a minimização de custos e manutenção,
+utilizando o número mínimo de juntas necessárias para uma executar uma determinada tarefa levando, por exemplo, ao 
+desenvolvimento dos robôs \emph{Selective Compliance Assembly Robot Arm} (SCARA) para operações de \emph{pick-and-place}.
+No entanto, essa abordagem  minimalista apresenta uma série de limitações em aplicações do mundo real, onde fatores como 
+limites de juntas, singularidades e obstáculos no espaço de trabalho estão presentes. A introdução de redundância cinemática
+permite o desenvolvimento de técnicas de controle que tornem o manipulador capaz de contornar essas limitações, garantindo
+um desempenho robusto e confiável. Ao ter mais graus de liberdade (DOF) do que o estritamente necessário, os manipuladores 
+redundantes podem alcançar maior destreza e versatilidade, tornando-os mais adequados para ambientes complexos e 
+dinamicamente mutáveis.
+
+A maior destreza proveniente da redundância pode ser observada numa maior flexibilidade para executar uma mesma tarefa de 
+diferentes maneiras, como por exemplo evitar colisões com obstáculos ou se afastar dos limites de operação das juntas e singulares
+utilizando para isso movimentos internos que não alteram a pose do efetuador final. Além disso, a redundância permite a otimização 
+de métricas de desempenho não necessariamente cinemáticas, como a minimização do torque ou do consumo de energia, melhorando a eficiência do sistema.
+Vale ressaltar que projetar manipuladores com juntas adicionais e garantir sua confiabilidade operacional é um processo complexo e custoso. Esquemas eficazes 
+de resolução de redundância são críticos para o sucesso do planejamento e controle de movimentos,  especialmente em ambientes dinâmicos. Apesar desses desafios, 
+os benefícios da redundância  cinemática em aumentar a destreza, versatilidade e eficiência fazem dela uma abordagem interessante em sistemas robóticos avançados.
 
 \section{Objetivos}\label{sec:objectives}
 
@@ -55,5 +75,5 @@ bem como apresentar uma abordagem prática para resolução de redundância de u
 No capítulo 2, é apresentada a fundamentação teórica, abordando conceitos essenciais como a representação de poses no
 espaço, transformações homogêneas, cinemática direta, cinemática diferencial, e a resolução de redundância.
 O capítulo 3 descreve a implementação prática, detalhando a simulação de manipuladores robóticos, a arquitetura de comunicação proposta
-e o algoritmo \emph{Resolved Rate Control}. No capítulo 4, são apresentados os resultados experimentais divididos em dois cenários
+e o algoritmo \emph{Resolved Rate Motion Control}. No capítulo 4, são apresentados os resultados experimentais divididos em dois cenários
 distintos, seguidos pela conclusão no capítulo 5, onde são discutidos os principais pontos abordados e sugestões para trabalhos futuros.

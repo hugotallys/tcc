@@ -736,7 +736,7 @@ Configurações paras as quais o posto da matriz jacobiana é menor que o máxim
 possível (em inglês \emph{rank deficiency}) são denominadas de
 \emph{singularidades} ou configurações singulares. Identificar configurações
 singulares é de grande importância para o controle de manipuladores por
-diversos motivos, entre eles:
+diversos motivos, entre eles~\cite[p. 122--123]{spong_robot_2020}:
 
 \begin{itemize}
     \item Singularidades representam configurações nas quais a mobilidade do manipulador
@@ -794,9 +794,8 @@ t_k + \Delta t\):
 onde \(\delta_t\) é um intervalo de integração apropriado (tempo de
 amostragem).
 
-O esquema de controle descrito acima é conhecido como \emph{resolved rate
-    control}, o qual consegue de maneira simples e elegante o solucionar o problema
-de gerar movimentos no efetuador final de velocidade constante sem recorrer à
+O esquema de controle descrito acima é conhecido como \emph{Resolved Rate Motion Control} (RRMC), o qual consegue de 
+maneira simples e elegante o solucionar o problema de gerar movimentos no efetuador final de velocidade constante sem recorrer à
 soluções numéricas ou analíticas para o cálculo da cinemática inversa~\cite{corke_robotics_2023}. 
 Tal esquema é útil na geração de trajetórias retilíneas no espaço de trabalho,
 conhecidas como trajetórias cartesianas, uma vez que a componente translacional
@@ -855,7 +854,7 @@ Num manipulador cinematicamente redundante, a matriz jacobiana de dimensão \(m
 colunas do que linhas e nesse caso existem infinitas soluções para o problema
 de cinemática inversa diferencial. Uma solução viável é formular o problema como 
 um de otimização linear com restrições, onde a solução ótima é obtida minimizando 
-o custo quadrático das velocidades das juntas~\cite{siciliano_robotics_2009}:
+o custo quadrático das velocidades das juntas:
 
 \begin{equation}
     \min_{\dot{q}} \left\Vert \dot{q} \right\Vert^2 \text{ sujeito a } J \dot{q} = \xi
@@ -875,6 +874,7 @@ conhecida como \emph{matriz inversa de Moore-Penrose} ou apenas
     J^\dag = J^\top {(J J^\top)}^{-1}
 \end{equation}
 
+Para uma demonstração completa desse resultado, o leitor aconselhado consultar~\cite[p. 124 -- 125]{siciliano_robotics_2009}.
 Vale notar que o termo \(I_n - J^\dag J\) atua projetando o vetor \(\dot{q_0}\)
 no espaço nulo de \(J\). Com efeito, aplicando a jacobiana à esquerda na
 equação (\ref{eq:pseudo-inverse}) temos:
@@ -913,7 +913,7 @@ Substituindo a solução de menor norma \(\dot{q} = J^\dag \xi\):
 A equação (\ref{eq:manipulability-ellipsoid}) define uma região no espaço de
 trabalho conhecido como \emph{elipsoide de manipulabilidade} que representa
 todas as velocidades possíveis do efetuador final para uma dada configuração do
-manipulador. Esse fato pode ser facilmente verificado ao considerarmos a
+manipulador. Esse fato pode ser verificado ao considerarmos a
 decomposição em valores singulares (SVD) da jacobiana \(J = U \Sigma V^\top\):
 
 \begin{align}\label{eq:manipulability-ellipsoid-svd}
@@ -974,7 +974,7 @@ aproximamos do limite do espaço de trabalho.
 Ao estabelecermos a solução geral dada pela equação (\ref{eq:pseudo-inverse}),
 dissemos que o vetor \(\dot{q_0}\) pode ser escolhido arbitrariamente. Uma
 possibilidade é tomá-lo de forma a maximar algum índice de performance \(w\),
-para isso escolhendo o vetor na direção do gradiente:
+para isso escolhendo o vetor na direção do gradiente~\cite[p. 126 -- 127]{siciliano_robotics_2009}:
 
 \begin{equation}\label{eq:metric-gradient}
     \dot{q_0} = k_0 {\left( \frac{\partial w(q)}{\partial q} \right)}^\top
@@ -1010,7 +1010,7 @@ de maneira analítica onde cada coordenada é dada por:
 \end{equation}
 
 Outro ponto a salientar é que a escolha do tamanho do passo \(k_0\) é crucial
-para a performance do algoritmo~\cite{siciliano_springer_2008}. Se \(k_0\) 
+para a performance do algoritmo~\cite[p. 256]{siciliano_springer_2008}. Se \(k_0\) 
 for muito pequeno o processo de otimização pode se tornar muito lento, enquanto 
 que se \(k_0\) for muito grande isso pode a uma diminuição ou até
  mesmo não convergência do valor de \(w\) devido a oscilações em torno do ponto 

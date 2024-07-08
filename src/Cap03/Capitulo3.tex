@@ -12,9 +12,9 @@ comunicação proposta para se controlar o manipulador utilizando o conceito de
 \emph{Actions} presente no framework \emph{Robot Operating System} (ROS), o
 qual permitiu uma implementação modularizada para execução dos experimentos.
 Por fim, iremos detalhar o esquema de controle e bibliotecas utilizadas na
-implementação do algoritmo \emph{Resolved Rate Control} para execução de
-trajetórias retilíneas bem como os experimentos realizados para se avaliar a
-resolução de redundância na execução de tais trajetórias.
+implementação do algoritmo RRMC para execução de trajetórias retilíneas bem como os 
+experimentos realizados para se avaliar a resolução de redundância na execução de 
+tais trajetórias.
 
 \section{Simulação de manipuladores robóticos}
 
@@ -183,6 +183,12 @@ para um nó servidor de ação, que reconhece a requisição, retorna um fluxo
 continua de dados através de um feedback até que a ação seja conlcuída ou
 cancelada, quando por fim retorna um resultado.
 
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{./Images/ros-action.pdf}
+	\caption{Componentes que constituem uma ação dentro do ROS. Adaptado de \cite[p. 36]{bassa_very_2023}.}\label{fig:exp3-error}
+\end{figure}
+
 \subsection*{Grafo de comunicação no ROS}
 
 Com o objetivo de se executar trajetórias no espaço de trabalho do manipulador,
@@ -196,7 +202,7 @@ ações associados a execução de uma trajetória. A seguir temos uma breve
 descrição do funcionamento de cada nó.
 
 \begin{itemize}
-    \item \textbf{snake\_driver} {-} Nó instânciado pelo simulador responsável por controlar os motores do manipulador.
+    \item \textbf{snake\_driver} {-} Nó instânciado pelo simulador, responsável por controlar os motores do manipulador.
           Está inscrito no tópico \texttt{target\_joint\_states} que recebe a configuração das juntas desejada para o manipulador
           e publica no tópico \texttt{joint\_states} os valores lidos pelos sensores de posição de cada motor. Este nó pode ser substuído por um nó
           que se comunique com um robô real, bastando que a interface de comunicação seja mantida, garantindo uma transferência natural do ambiente simulado para testes físicos.
@@ -216,16 +222,16 @@ descrição do funcionamento de cada nó.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{./Images/com-arch.png}
+    \includegraphics[width=0.8\textwidth]{./Images/ros-arch.pdf}
     \caption{Arquitetura de comunicação proposta para controle do manipulador.}\label{fig:coms_arch}
 \end{figure}
 
-\section{O Algoritmo \emph{Resolved Rate Control}}
+\section{O Algoritmo \emph{Resolved Rate Motion Control}}
 
 Para realizar o controle da trajetória do manipulador e também a resolução da
-redundância, foi utilizado o esquema de controle \emph{Resolved Rate Control}
+redundância, foi utilizado o esquema de controle \emph{Resolved Rate Motion Control} (RRMC)
 definido no capítulo anterior. A figura~\ref{fig:block-diagram} ilustra o
-diagrama de blocos do controlador RRC implementado pelo nó
+diagrama de blocos do controlador RRMC implementado pelo nó
 \emph{snake\_controller}. Dada uma taxa de variação da posição do efetuador
 final \(\xi\) e um vetor de velocidades das juntas \(\dot{q_0}\), o controlador
 atua atualizando a configuração do manipulador de acordo com a
@@ -234,7 +240,7 @@ equação~\ref{eq:pseudo-inverse}.
 \begin{figure}
     \centering
     \includegraphics[width=0.6\textwidth]{./Images/control-scheme.png}
-    \caption{Diagrama de blocos do controlador RRC}\label{fig:block-diagram}
+    \caption{Diagrama de blocos do controlador RRMC}\label{fig:block-diagram}
 \end{figure}
 
 Para a realização dos experimentos, foi implementado o algoritmo~\ref{rrc-alg}
@@ -247,7 +253,7 @@ Já para a manipulabilidade, o gradiente é estimado numericamente através de
 diferenças finitas, considerando um passo \(h\) suficientemente pequeno.
 
 \begin{algorithm}
-    \caption{\emph{Resolved Rate Controller} {-} Atualizando o estado das juntas}\label{rrc-alg}
+    \caption{\emph{Resolved Rate Motion Controller} {-} Atualizando o estado das juntas}\label{rrc-alg}
     \begin{algorithmic}[1]\Procedure{updateJointPosition}{$q$, $\xi$, $k_0$, $\delta_t$, \texttt{metricName}}
         \State$\xi \gets {Rot(\mathbf{T}^w_0)}^\top \xi$
         \State$J \gets Jacobian(q)$
@@ -287,7 +293,7 @@ posicação do efetuador final foram registrados na simulação de modo a se ava
 a eficácia do esquema da resolução de redundância na execução de tais experimentos.
 
 Em cada iteração do \emph{loop de trajetória}, o vetor de velocidade é calculado e 
-fornecido como entrada para o controlador RRC. A execução da trajetória para sempre 
+fornecido como entrada para o controlador RRMC. A execução da trajetória para sempre 
 que o número máximo de iterações é atingido (em ambos os cenários, definido como 500) ou 
 se a norma do vetor de erro de posição se torna menor que 0,01 (apenas no segundo cenário). 
 Para avaliar o desempenho em cada trajetória, calculamos a pontuação:
@@ -306,13 +312,13 @@ trajetórias do manipulador robótico. Inicialmente, são escolhidas duas config
 o chão (plano $z=0$): caso positivo, retorna-se à escolha das configurações. Se não há 
 colisão, escolhe-se um ganho \(k_0\) e calcula-se o erro de posição \(\xi\). Avalia-se 
 se há condições de parada da trajetória; se sim, os resultados são salvos e a trajetória 
-é reiniciada com um novo ganho \(k_0\). Se não, atualiza-se \(E_0\) conforme o RRC
+é reiniciada com um novo ganho \(k_0\). Se não, atualiza-se \(E_0\) conforme o RRMC
 e o processo continua até não haver mais ganhos \(k_0\) para escolher, concluindo o 
 experimento.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Images/exp-flow.png}
+	\includegraphics[width=0.8\textwidth]{./Images/exp-flow.pdf}
 	\caption{Etapas seguidas na execução de um experimento.}\label{fig:exp-flow}
 \end{figure}
 
