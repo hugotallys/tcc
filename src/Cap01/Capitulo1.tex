@@ -1,24 +1,59 @@
 \chapter{Introdução}\label{cap:introduction}
 
-\section{Motivação}\label{sec:motivation}
+A redundância robótica refere-se ao uso de graus adicionais de liberdade (DOF) além do mínimo necessário para uma determinada tarefa.
+No contexto de robôs industriais e manipuladores, é importante abordar e resolver questões relacionadas às singularidades, que
+ocorrem quando a configuração de um robô leva à perda de mobilidade, a um número infinito de possíveis configurações e a grandes
+velocidades no espaço das juntas, dadas pequenas velocidades no espaço de trabalho. Em relação ao desempenho da tarefa, as singularidades
+podem resultar em comportamento indefinido ou imprevisível do robô.
 
-% Tópicos a serem abordados
-% Robot manipulators (fixed robots)
-% Manipulator inverse kinematics problem
-% Trajectory planning
-% Redundant manipulators / Redundancy resolution (Null space motion)
+A importância da redundância robótica na solução de singularidades reside na sua capacidade de fornecer caminhos alternativos
+para o planejamento de movimentos. Ao ter DOFs extras, um robô pode manobrar ao redor de configurações singulares, mantendo a
+eficiência operacional e a segurança. Essa flexibilidade garante que o robô possa continuar executando suas tarefas mesmo ao
+se aproximar ou operar perto de pontos singulares, que são tipicamente inevitáveis em tarefas complexas. Além disso, a redundância
+permite a otimização de outros critSérios de desempenho, como minimizar o consumo de energia, reduzir o desgaste, melhorar a
+precisão e aumentar as capacidades de evasão de obstáculos. Portanto, a redundância robótica não apenas resolve problemas de
+singularidade, mas também melhora a robustez e a versatilidade geral dos sistemas robóticos.
+
+Recentemente, \cite{li2023pseudo} propuseram um esquema baseado em pseudo-inversa para controle de movimento em nível de aceleração,
+demonstrando a viabilidade do método através de simulações com o manipulador robótico PA10. Por outro lado, \cite{kuri2023som}
+abordaram a resolução de redundância através da combinação de Mapas Auto-Organizáveis (SOM) e uma matriz de Norma Mínima Ponderada
+(WLN), mostrando melhorias significativas no controle de trajetória espacial para um manipulador robótico de 5 graus de liberdade.
+
+\cite{hammond2011configuring} explorou o aumento da resolução de movimento eficaz através da configuração de manipuladores cinemáticos
+redundantes, onde a redundância cinemática é usada para otimizar a resolução de movimento para tarefas específicas, destacando o potencial dessas
+abordagens em aplicações de micromanipulação e montagem de precisão.
+
+Este trabalho estuda a aplicação da redundância cinemática no algoritmo de controle de movimento de um manipulador serial de 5 DOF.
+Implementamos estratégias de controle de movimento baseadas na manipulabilidade usando dois índices: a distância aos limites mecânicos
+das juntas e a medida de manipulabilidade de Yoshikawa. Em seguida, propomos uma arquitetura de comunicação robótica que suporta tanto
+simulação quanto comandos para robôs reais para implementar as técnicas. Finalmente, apresentamos gráficos e resultados que avaliam o
+desempenho dos cenários experimentais enquanto alteramos os parâmetros do controlador.
+
+\section{Motivação}\label{sec:motivation}
 
 \section{Objetivos}\label{sec:objectives}
 
-% Objetivo geral
+\subsection{Objetivos Gerais}
 
-- Devise a kinematic model for a redundant manipulator
+Obter a modelagem de cinemática inversa diferencial em manipuladores seriais redundantes, possibilitando a execução de
+trajetórias no espaço de trabalho que levam em conta não só as restrições cinemáticas do movimento mas também critérios
+de desempenho do manipulador.
 
-- Stabilish a kinematic control scheme to generate cartesian trajectories and null space motion
-
-Specific objectives:
-
-- Simulate the task on the denso vp6242 robot
-- test on the real robot (if possible) (use ROS on both simulated environemnt and real robot to a seamless integration)
+\subsection{Objetivos Específicos}
+\begin{itemize}
+	\item Estudar a modelagem de cadeias cinemáticas em manipuladores robóticos seriais
+	\item Investigar o uso da cinemática direta e inversa diferenciais para execução de trajetórias cartesianas
+	\item Implementar a lei de controle utilizando a cinemática direta diferencial e esquemas de resolução de redundância utilizando a pseudo inversa da matriz jacobiana
+	\item Propor um ambiente simulado para execução de experimentos utilizando o modelo virtual do manipulador robótico com 5 graus de liberdade
+	\item Analisar o desempenho do esquema de controle em diferentes cenários de execução de trajetórias e critérios de desempenho.
+\end{itemize}
 
 \section{Estrutura do texto}\label{sec:structure}
+
+Este trabalho está estruturado de modo a introduzir os conceitos já difundidos da cinemática diferencial em manipuladores redundantes,
+bem como apresentar uma abordagem prática para resolução de redundância de um manipulador planar simples, com cinco graus de liberdade.
+No capítulo 2, é apresentada a fundamentação teórica, abordando conceitos essenciais como a representação de poses no
+espaço, transformações homogêneas, cinemática direta, cinemática diferencial, e a resolução de redundância.
+O capítulo 3 descreve a implementação prática, detalhando a simulação de manipuladores robóticos, a arquitetura de comunicação proposta
+e o algoritmo \emph{Resolved Rate Control}. No capítulo 4, são apresentados os resultados experimentais divididos em dois cenários
+distintos, seguidos pela conclusão no capítulo 5, onde são discutidos os principais pontos abordados e sugestões para trabalhos futuros.
