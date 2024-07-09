@@ -12,25 +12,22 @@ aumentar a capacidade de evasão de obstáculos.
 
 A abordagem tradicional no projeto de manipuladores teve como foco principal a minimização de custos e manutenção,
 utilizando o número mínimo de juntas necessárias para uma executar uma determinada tarefa levando, por exemplo, ao
-desenvolvimento dos robôs \emph{Selective Compliance Assembly Robot Arm} (SCARA) para operações de \emph{pick-and-place}.
+desenvolvimento dos robôs \emph{Selective Compliance Assembly Robot Arm} (SCARA) para operações de \emph{pick-and-place}~\cite[p. 246]{siciliano_springer_2008}.
 No entanto, essa abordagem  minimalista apresenta uma série de limitações em aplicações do mundo real, onde fatores como
 limites de juntas, singularidades e obstáculos no espaço de trabalho estão presentes. Ao ter mais graus de liberdade (DOF)
 do que o estritamente necessário, os manipuladores redundantes podem alcançar maior destreza e versatilidade, tornando-os
 mais adequados para ambientes complexos e dinamicamente mutáveis.
 
-A maior destreza proveniente da redundância pode ser observada numa maior flexibilidade para executar uma mesma tarefa de
-diferentes maneiras, como por exemplo evitar colisões com obstáculos ou se afastar dos limites de operação das juntas e singulares
-utilizando para isso movimentos internos que não alteram a pose do efetuador final. Além disso, a redundância permite a otimização
-de métricas de desempenho não necessariamente cinemáticas, como a minimização do torque ou do consumo de energia, melhorando a
-eficiência do sistema. Vale ressaltar que projetar manipuladores com juntas adicionais e garantir sua confiabilidade operacional é um
+Para além das restrições cinemáticas, a redundância permite a otimização de métricas de desempenho, como a minimização do torque ou do consumo de energia, melhorando a
+eficiência geral do sistema. Vale ressaltar que projetar manipuladores com juntas adicionais e garantir sua confiabilidade operacional é um
 processo complexo e custoso. Esquemas eficazes de resolução de redundância são críticos para o sucesso do planejamento e controle de movimentos,
 especialmente em ambientes dinâmicos. Apesar desses desafios, os benefícios da redundância cinemática em aumentar a destreza, versatilidade e eficiência
 fazem dela uma abordagem interessante em sistemas robóticos avançados.
 
-% Recentemente, \cite{li2023pseudo} propuseram um esquema baseado em pseudo-inversa para controle de movimento em nível de aceleração,
-% demonstrando a viabilidade do método através de simulações com o manipulador robótico PA10. Por outro lado, \cite{kuri2023som}
-% abordaram a resolução de redundância através da combinação de Mapas Auto-Organizáveis (SOM) e uma matriz de Norma Mínima Ponderada
-% (WLN), mostrando melhorias significativas no controle de trajetória espacial para um manipulador robótico de 5 graus de liberdade.
+Recentemente, \cite{li2023pseudo} propuseram um esquema baseado em pseudo-inversa para controle de movimento em nível de aceleração,
+demonstrando a viabilidade do método através de simulações com o manipulador robótico PA10. Por outro lado, \cite{kuri2023som}
+abordaram a resolução de redundância através da combinação de Mapas Auto-Organizáveis (SOM) e uma matriz de Norma Mínima Ponderada
+(WLN), mostrando melhorias significativas no controle de trajetória espacial para um manipulador robótico de 5 graus de liberdade.
 
 % O artigo intitulado "A pseudo-inverse redundancy-based resolution scheme at the acceleration level to control robotic arm motion"~\cite{li2023pseudo} por
 % Qu Li, Naimeng Cang, Weidong Zhang, Dongsheng Guo e Canwei Zhang, propõe um novo esquema de evitação de obstáculos (OA) para manipuladores robóticos redundantes.
@@ -55,9 +52,9 @@ fazem dela uma abordagem interessante em sistemas robóticos avançados.
 % de workspace e otimização de design morfológico. Os resultados mostram que o índice EMR pode ser usado tanto como uma métrica de aptidão em otimização de design quanto como
 % um objetivo na resolução de redundância, melhorando significativamente a resolução de movimento em trajetórias específicas sem a necessidade de componentes de alta precisão e custo elevado.
 
-% \cite{hammond2011configuring} explorou o aumento da resolução de movimento eficaz através da configuração de manipuladores cinemáticos
-% redundantes, onde a redundância cinemática é usada para otimizar a resolução de movimento para tarefas específicas, destacando o potencial dessas
-% abordagens em aplicações de micromanipulação e montagem de precisão.
+\cite{hammond2011} explorou o aumento da resolução de movimento eficaz através da configuração de manipuladores cinemáticos
+redundantes, onde a redundância cinemática é usada para otimizar a resolução de movimento para tarefas específicas, destacando o potencial dessas
+abordagens em aplicações de micromanipulação e montagem de precisão.
 
 % \cite{ancona2017} O artigo intitulado "Redundancy modelling and resolution for robotic mobile manipulators: a general approach" por Roberto Ancona aborda a modelagem e 
 % resolução de redundância cinemática para manipuladores móveis robóticos. Um conjunto de parâmetros de redundância é introduzido para definir um procedimento geral de cinemática 
