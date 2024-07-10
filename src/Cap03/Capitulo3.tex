@@ -26,15 +26,15 @@ simuladores oferecem um ambiente acessível e barato de prototipação com uma
 variedade de robôs disponíveis e prontos para uso, sem o risco de danificar o
 equipamento físico economizando assim tempo e recursos. A simulação pode ser
 executada mais rápido do que em tempo real (o que é especialmente importante
-para abordagens baseadas em aprendizado ou análises de natureza estatístico), é
+para abordagens baseadas em aprendizado ou análises de natureza estatística), é
 paralelizável e não requer intervenção física para reiniciar um ambiente.
 
 Para se implementar um ambiente simulado diversas características do simulador
 devem ser levadas em conta, tais como: o modelo do robô a ser simulado, os
 sensores e atuadores disponíveis, o ambiente físico a ser simulado (por
-exemplo, correntes de ar, ambientes aquáticos, etc), linguagens de programação
+exemplo, correntes de ar, ambientes aquáticos), linguagens de programação
 disponíveis para controle do robô, formatos suportados, extensibilidade,
-documentação etc.
+documentação entre outros.
 
 Neste trabalho, optamos por utilizar a linguagem de programação \emph{Python}
 devido à disponibilidade de pacotes para computação numérica e visualização
@@ -64,7 +64,7 @@ juntas consecutivas possuem eixos de rotação ortogonais entre si. Com isso, a
 posição do efetuador final não fica restrita a um plano perpendicular ao eixo
 de rotação das juntas, o que permite especificarmos no espaço de trabalho,
 vetores com três coordenadas para compor a trajetória a ser seguida. Como \(n =
-5 \text{ e } m = 3\) o manipulador tem um grau de redundância de duas juntas
+5 \text{ e } m = 3\) o manipulador tem grau de redundância de duas juntas
 excedentes. A tabela~\ref{tab:dh-parameters-5r} resume os parâmetros DH
 utilizados para modelar a cadeia cinemática.
 
@@ -133,11 +133,11 @@ e no caso dos soquetes, a densidade do material PLA foi utilizada para estimar
 sua massa com base no volume da geometria modelada (conjunto de caixas). Além
 disso, a definição das matrizes de inércia ficou por conta do próprio
 simulador, que estima seu valor com base na massa fornecida e na posição e
-orientação das primitivas utilizadas durtante a modelagem. Vale ressaltar que a
-adição das propriedades dinâmicas tem caráter apenas de aproxição de um cenário
+orientação das primitivas utilizadas durante a modelagem. Vale ressaltar que a
+adição das propriedades dinâmicas tem caráter apenas de aproximação de um cenário
 mais real, tendo em vista que o esquema de controle proposto atua apenas na
-velodidade das juntas ao passo que a posição do motor é controlada de maneira
-automática pelo simulador através de um PID intrisceco à simulação de um
+velocidade das juntas ao passo que a posição do motor é controlada de maneira
+automática pelo simulador através de um PID intrínseco à simulação de um
 dispositivo como o motor.
 
 \begin{figure}
@@ -171,22 +171,22 @@ motores, informações de estado, comandos de atuadores entre outros.
 \subsection*{Serviços e Ações no ROS}
 
 Serviços e ações constituem outras formas de comunicação entre nós no grafo do
-ROS e implmentam uma abordagem de troca de mensagens do tipo cliente/servidor.
+ROS e implementam uma abordagem de troca de mensagens do tipo cliente/servidor.
 Serviços representam ações que um nó pode executar com um início e fim
-definidos, resultando em um único resultado são normalmente usados para tarefas
+definidos, retornando um único resultado e são normalmente usados para tarefas
 que possuem requisição e retorno, como por exemplo capturar uma imagem de um
 único quadro, dispensando o processamento contínuo. Por outro lado, ações são
 destinadas a tarefas de longa duração e são construídas com base em diferentes
 tópicos e serviços. Ações consistem em três partes: um objetivo, um
 \emph{feedback} e um resultado. Um nó do tipo cliente de ação envia um objetivo
 para um nó servidor de ação, que reconhece a requisição, retorna um fluxo
-continua de dados através de um feedback até que a ação seja conlcuída ou
+continua de dados através de um feedback até que a ação seja concluída ou
 cancelada, quando por fim retorna um resultado.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.8\textwidth]{./Images/ros-action.pdf}
-	\caption{Componentes que constituem uma ação dentro do ROS. Adaptado de \cite[p. 36]{bassa_very_2023}.}\label{fig:exp3-error}
+	\caption{Componentes que constituem uma ação dentro do ROS. Adaptado de \cite[p. 36]{bassa_very_2023}.}\label{fig:ros-action}
 \end{figure}
 
 \subsection*{Grafo de comunicação no ROS}
@@ -202,9 +202,9 @@ ações associados a execução de uma trajetória. A seguir temos uma breve
 descrição do funcionamento de cada nó.
 
 \begin{itemize}
-    \item \textbf{snake\_driver} {-} Nó instânciado pelo simulador, responsável por controlar os motores do manipulador.
+    \item \textbf{snake\_driver} {-} Nó instanciado pelo simulador, responsável por controlar os motores do manipulador.
           Está inscrito no tópico \texttt{target\_joint\_states} que recebe a configuração das juntas desejada para o manipulador
-          e publica no tópico \texttt{joint\_states} os valores lidos pelos sensores de posição de cada motor. Este nó pode ser substuído por um nó
+          e publica no tópico \texttt{joint\_states} os valores lidos pelos sensores de posição de cada motor. Este nó pode ser substituído por um nó
           que se comunique com um robô real, bastando que a interface de comunicação seja mantida, garantindo uma transferência natural do ambiente simulado para testes físicos.
 
     \item \textbf{snake\_controller} {-} Nó responsável por implementar a lógica de controle do manipulador. Este nó está inscrito/publica nos dois tópicos
@@ -244,9 +244,9 @@ equação~\ref{eq:pseudo-inverse}.
 \end{figure}
 
 Para a realização dos experimentos, foi implementado o algoritmo~\ref{rrc-alg}
-que escolhe o vetor \(\dot{q_0}\) de acordo com o gradiente dado pela
+(código disponível em \url{https://github.com/hugotallys/snakesim}) que escolhe o vetor \(\dot{q_0}\) de acordo com o gradiente dado pela
 equação~\ref{eq:metric-gradient}. As duas métricas apresentadas anteriormente
-forma calculadas: \emph{distância para os limites mecânicos das juntas} e
+foram calculadas: \emph{distância para os limites mecânicos das juntas} e
 \emph{medida de manipulabilidade de Yoshikawa}. No primeiro caso, o gradiente é
 calculado analiticamente de acordo com a equação~\ref{eq:joint-distance-grad}.
 Já para a manipulabilidade, o gradiente é estimado numericamente através de
@@ -285,11 +285,11 @@ diferenças finitas, considerando um passo \(h\) suficientemente pequeno.
 Os experimentos focaram na avaliação da resolução de redundância
 sob valores variados do ganho (\(k_0\)) e envolveram dois cenários. No primeiro
 cenário, o manipulador foi controlado de modo a otimizar a distância para o limite mecânico das juntas, 
-executando movimentos internos no seu espaço nulo, mantendo a posicação do efetuador final \(E_0\) estacionária.
+executando movimentos internos no seu espaço nulo, mantendo a posição do efetuador final \(E_0\) estacionária.
 No segundo cenário, além de movimentos internos para otimizar seu índice de manipulabilidade, o manipulador 
-seguiu uma trajtória cartesiana entre a posicação atual \(E_0\) e um outro ponto no seu espaço 
+seguiu uma trajetória cartesiana entre a posição atual \(E_0\) e um outro ponto no seu espaço 
 de trabalho \(E_f\). Os índices de desempenho, configuração das juntas e a 
-posicação do efetuador final foram registrados na simulação de modo a se avaliar 
+posição do efetuador final foram registrados na simulação de modo a se avaliar 
 a eficácia do esquema da resolução de redundância na execução de tais experimentos.
 
 Em cada iteração do \emph{loop de trajetória}, o vetor de velocidade é calculado e 
@@ -326,5 +326,5 @@ Vale ressaltar que devido a natureza complexa da determinação do espaço
 de trabalho do manipulador, procurou-se simplesmente escolher 
 os pontos inicias e finais de modo que sejam posições atingíveis, deixando a 
 cargo do controlador a execução da melhor trajetória cartesiana entre os dois pontos.
-Além disso, a escolha de tais pontos foi feita de maneira aleatória ao longo de disversos experimentos
+Além disso, a escolha de tais pontos foi feita de maneira aleatória ao longo de diversos experimentos
 de modo a não privilegiar nenhuma configuração específica do manipulador.

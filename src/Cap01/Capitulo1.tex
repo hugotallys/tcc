@@ -2,27 +2,12 @@
 
 A redundância cinemática na robótica refere-se ao uso de graus de liberdade (DOF) adicionais além do mínimo necessário para executar uma
 tarefa específica. Em robôs industriais e manipuladores, singularidades cinemáticas ocorrem quando a configuração do robô resulta na perda de um ou mais DOFs, 
-reduzindo sua mobilidade e causando comportamentos indefinidos ou imprevisíveis na cinemática inversa diferencial. A importância da redundância está na capacidade de 
-fornecer caminhos alternativos para o planejamento de movimentos, permitindo que o robô manobre ao redor de configurações singulares, mantendo a eficiência operacional e a segurança. Essa
-flexibilidade assegura que o robô continue a executar suas tarefas mesmo próximo a pontos singulares, comuns em tarefas complexas. Além disso, a resolução
+reduzindo sua capacidade de movimento. De maneira mais precisa, isso significa que há alguma direção (ou subespaço) no espaço cartesiano ao longo da qual é 
+impossível mover o efetuador final, independentemente das velocidades empenhadas nas juntas~\cite{craig2004}. A importância da redundância está na capacidade de 
+fornecer caminhos alternativos para o planejamento de movimentos, permitindo que o robô manobre ao redor de configurações singulares, mantendo a eficiência 
+operacional e a segurança. Essa flexibilidade assegura que o robô continue a executar suas tarefas mesmo próximo a pontos singulares, comuns em tarefas complexas. Além disso, a resolução
 de redundância possibilita a otimização de outros critérios de desempenho, como minimizar o consumo de energia, reduzir o desgaste, melhorar a precisão e
 aumentar a capacidade de evasão de obstáculos.
-
-\section{Motivação}\label{sec:motivation}
-
-A abordagem tradicional no projeto de manipuladores teve como foco principal a minimização de custos e manutenção,
-utilizando o número mínimo de juntas necessárias para uma executar uma determinada tarefa levando, por exemplo, ao
-desenvolvimento dos robôs \emph{Selective Compliance Assembly Robot Arm} (SCARA) para operações de \emph{pick-and-place}~\cite[p. 246]{siciliano_springer_2008}.
-No entanto, essa abordagem  minimalista apresenta uma série de limitações em aplicações do mundo real, onde fatores como
-limites de juntas, singularidades e obstáculos no espaço de trabalho estão presentes. Ao ter mais graus de liberdade (DOF)
-do que o estritamente necessário, os manipuladores redundantes podem alcançar maior destreza e versatilidade, tornando-os
-mais adequados para ambientes complexos e dinamicamente mutáveis.
-
-Para além das restrições cinemáticas, a redundância permite a otimização de métricas de desempenho, como a minimização do torque ou do consumo de energia, melhorando a
-eficiência geral do sistema. Vale ressaltar que projetar manipuladores com juntas adicionais e garantir sua confiabilidade operacional é um
-processo complexo e custoso. Esquemas eficazes de resolução de redundância são críticos para o sucesso do planejamento e controle de movimentos,
-especialmente em ambientes dinâmicos. Apesar desses desafios, os benefícios da redundância cinemática em aumentar a destreza, versatilidade e eficiência
-fazem dela uma abordagem interessante em sistemas robóticos avançados.
 
 Recentemente, \cite{li2023pseudo} propuseram um esquema baseado em pseudo-inversa para controle de movimento em nível de aceleração,
 demonstrando a viabilidade do método através de simulações com o manipulador robótico PA10. Por outro lado, \cite{kuri2023som}
@@ -74,11 +59,27 @@ abordagens em aplicações de micromanipulação e montagem de precisão.
 % estudo de caso, o artigo considera um braço robótico passivo usado em um sistema cirúrgico, com a tarefa de determinar a localização ótima da base e o comprimento do primeiro elo.
 % Os resultados indicam a eficácia do método proposto na otimização do design de braços robóticos.
 
+\section{Motivação}\label{sec:motivation}
+
+A abordagem tradicional no projeto de manipuladores teve como foco principal a minimização de custos e manutenção,
+utilizando o número mínimo de juntas necessárias para uma executar uma determinada tarefa levando, por exemplo, ao
+desenvolvimento dos robôs \emph{Selective Compliance Assembly Robot Arm} (SCARA) para operações de \emph{pick-and-place}~\cite{siciliano_springer_2008}.
+No entanto, essa abordagem  minimalista apresenta uma série de limitações em aplicações do mundo real, onde fatores como
+limites de juntas, singularidades e obstáculos no espaço de trabalho estão presentes. Ao ter DOFs
+do que o estritamente necessário, os manipuladores redundantes podem alcançar maior destreza e versatilidade, tornando-os
+mais adequados para ambientes complexos e dinamicamente mutáveis.
+
+Para além das restrições cinemáticas, a redundância permite a otimização de métricas de desempenho, como a minimização do torque ou do consumo de energia, melhorando a
+eficiência geral do sistema. Vale ressaltar que projetar manipuladores com juntas adicionais e garantir sua confiabilidade operacional é um
+processo complexo e custoso. Esquemas eficazes de resolução de redundância são críticos para o sucesso do planejamento e controle de movimentos,
+especialmente em ambientes dinâmicos. Apesar desses desafios, os benefícios da redundância cinemática em aumentar a destreza, versatilidade e eficiência
+fazem dela uma abordagem interessante em sistemas robóticos avançados.
+
 \section{Objetivos}\label{sec:objectives}
 
 \subsection{Objetivos Gerais}
 
-Obter a modelagem de cinemática inversa diferencial em manipuladores seriais redundantes, possibilitando a execução de
+Estudar e implementar a modelagem de cinemática inversa diferencial em manipuladores seriais redundantes, possibilitando a execução de
 trajetórias no espaço de trabalho que levam em conta não só as restrições cinemáticas do movimento mas também critérios
 de desempenho do manipulador.
 

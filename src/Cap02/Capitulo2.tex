@@ -1,132 +1,42 @@
 \chapter{Fundamentação teórica}\label{cap:background}
 
-\section{Poses no espaço}
+\section{Representação de Poses no espaço}
 
-O estudo da cinemática na robótica envolve principalmente o estabelecimento de
-sistemas de coordenadas (em inglês, \emph{frames}) para representar posições e
-orientações de corpos rígidos, além da caracterização das transformações entre
-esses frames. Nesta seção, definiremos uma forma precisa para representar
-translações e rotações no espaço por meio de matrizes e vetores. Em seguida,
-apresentaremos as transformações homogêneas, que combinam as operações de
-rotação e translação em uma única multiplicação matricial, proporcionando uma
-maneira concisa de estabelecer a relação entre dois frames distintos.
-
-\subsection{Representado posições e orientações no espaço}
-
-Um sistema de coordenadas ou \emph{frame} é definido por um ponto e um conjunto
-de vetores ortonormais que formam uma base no espaço considerado (dois vetores
-no plano e três vetores no espaço tridimensional). No contexto da robótica é
-muito comum a especificação de uma tarefa com base em coordenadas cartesianas
-relativas a algum frame de referência como ilustrado na
-figura~\ref{fig:frames}. Podemos tomar o \emph{frame} \(o_0 x_0 y_0 z_0\) como
-referência e expressar qualquer ponto \(P\) do espaço através de um vetor com
-origem em \(o_0\) e extremidade em \(P\) de modo que escreveríamos:
-
-\begin{equation}
-    p^0 = v_0^0 = \begin{bmatrix}
-        1 \\
-        1 \\
-        1
-    \end{bmatrix}
-\end{equation}
-
-onde o expoente \(0\) indica que o vetor é expresso com coordenadas referentes
-ao \emph{frame} \(o_0 x_0 y_0 z_0\). Contudo, ainda observando a
-figura~\ref{fig:frames}, podemos expressar o mesmo ponto \(P\) com coordenadas
-referentes ao \emph{frame} \(o_1 x_1 y_1 z_1\) através do vetor \(v_1^1\) de
-modo que, teríamos por exemplo:
-
-\begin{equation}
-    p^1 = v_1^1 = \begin{bmatrix}
-        2    \\
-        -1.5 \\
-        3
-    \end{bmatrix}
-\end{equation}
-
-Além disso, poderíamos também calcular \(v_1^0\) e \(v_0^1\) de modo que as
-coordenadas do vetor dependem do sistema de referência utilizado.
+A representação de poses no espaço na robótica envolve o uso de sistemas de 
+coordenadas, ou \emph{frames}, para descrever as posições e orientações de corpos 
+rígidos, além das transformações entre esses frames. Um frame é composto por 
+um ponto e um conjunto de vetores ortonormais que formam uma base do \(\mathbb{R}^3\). 
+No contexto da robótica fixa, é comum especificar tarefas utilizando coordenadas 
+cartesianas relativas a um frame de referência. Por exemplo, um ponto \(o_1^0\),
+representando uma translação, pode ser expresso como um vetor com origem em um 
+frame \(o_0 x_0 y_0 z_0\) e extremidade em outro frame \(o_1 x_1 y_1 z_1\), onde o expoente
+indica em relação a qual frame as coordenadas são escritas. 
+A orientação entre esses mesmos frames pode ser representada por uma matriz de rotação
+\( R_1^0 \), pertencente ao grupo especial ortogonal de ordem 3 (\(SO(3)\)),
+que possui a útil propriedade no cálculo da sua inversa: \((R_1^0)^{-1} = (R_1^0)^\top = R_0^1 \).
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\linewidth]{Images/frames.pdf} % Adjust the width as needed
-    \caption{Dois sistemas de coordenadas, um ponto P e vetores que o representam.}\label{fig:frames}
+    \includegraphics[width=0.8\linewidth]{Images/frames.pdf}
+    \caption{Representação de um ponto \(p\) em diferentes frames.} \label{fig:frames}
 \end{figure}
 
-Para estabelecer a relação completa entre os dois \emph{frames} precisamos
-também considerar a orientação de um com relação ao outro. Podemos expressar
-relação de orientação entre os \emph{frames} \(\{0\}\) e \(\{1\}\) utilizando a
-matriz de mudança de base \(R_1^0\) dada por:
-
-\begin{equation}
-    R_1^0 = \begin{bmatrix}
-        x_1 \cdot x_0 & y_1 \cdot x_0 & z_1 \cdot x_0 \\
-        x_1 \cdot y_0 & y_1 \cdot y_0 & z_1 \cdot y_0 \\
-        x_1 \cdot z_0 & y_1 \cdot z_0 & z_1 \cdot z_0
-    \end{bmatrix}
-\end{equation}
-
-onde \((\cdot)\) denota o produto escalar entre dois vetores.
-
-A matriz \(R_1^0\) faz parte de um conjunto de matrizes denominado grupo
-especial ortogonal de ordem 3 (\(SO(3)\)) que possui algumas propriedades
-interessantes dentre elas a facilidade de se calcular sua inversa:
-
-\begin{equation}
-    {(R_1^0)}^{-1} = {(R_1^0)}^{\top} = R_0^1
-\end{equation}
-
-Se a relação entre os \emph{frames} é composta apenas por uma rotação de
-\(\theta\) radianos em torno de cada eixo ordenado, podemos calcular as
-seguintes matrizes de transformação elementares:
-
-\begin{equation}
-    R_x(\theta) = \begin{bmatrix}
-        1 & 0            & 0             \\
-        0 & \cos(\theta) & -\sin(\theta) \\
-        0 & \sin(\theta) & \cos(\theta)
-    \end{bmatrix}
-\end{equation}
-
-\begin{equation}
-    R_y(\theta) = \begin{bmatrix}
-        \cos(\theta)  & 0 & \sin(\theta) \\
-        0             & 1 & 0            \\
-        -\sin(\theta) & 0 & \cos(\theta)
-    \end{bmatrix}
-\end{equation}
-
-\begin{equation}
-    R_z(\theta) = \begin{bmatrix}
-        \cos(\theta) & -\sin(\theta) & 0 \\
-        \sin(\theta) & \cos(\theta)  & 0 \\
-        0            & 0             & 1
-    \end{bmatrix}
-\end{equation}
-
-\subsection{Transformações homogêneas}
-
-Um deslocamento rígido no espaço pode ser representado por uma translação pura
-seguida de uma rotação pura. De maneira mais precisa, podemos defini-lo como um
-par ordenado \((R, d)\) onde \(R \in SO(3)\) e \(d \in \mathbb{R}^3\). O grupo
-de todas as transformações rígidas no espaço tridimensional é denominado grupo
-especial euclidiano de ordem 3 (\(SE(3)\)) onde vemos claramente que \(SE(3) =
-\mathbb{R}^3 \times SO(3)\).
-
-Seja \(R_1^0\) a matriz de rotação que especifica a orientação do sistema de
-coordenadas \(\{1\}\) com relação ao sistema de coordenadas \(\{0\}\) e
-\(o_1^0\) o vetor de deslocamento une suas origens. Como visto ne seção
-anterior, se \(P\) é um ponto fixado ao sistema de coordenadas \(\{1\}\) com
-coordenadas locais dadas por \(p^1\) então, podemos expressar as coordenadas de
-\(P\) com relação ao sistema de coordenadas \(\{0\}\) usando o seguinte
-deslocamento rígido:
+O grupo especial euclidiano de ordem 3 (\(SE(3)\)) combina rotações e 
+translações em uma única representação, facilitando a descrição de 
+deslocamentos rígidos no espaço tridimensional. Um deslocamento rígido 
+é definido por um par ordenado \((R, d)\), onde \(R\) é uma matriz de 
+rotação em \(SO(3)\) e \(d\) é um vetor de translação em \(\mathbb{R}^3\). Observando
+a figura \ref{fig:frames}, podemos ver que a posição de um ponto \(p\) com relação
+a um frame de referência \(o_0 x_0 y_0 z_0\) pode ser expressa como:
 
 \begin{equation}\label{eq:rigid-motion}
     p^0 = R_1^0 p^1 + o_1^0
 \end{equation}
 
-A equação (\ref{eq:rigid-motion}) pode ser reescrita de maneira mais compacta
-utilizando-se a seguinte formulação matricial:
+Assim, a equação \ref{eq:rigid-motion} descreve um deslocamento rígido 
+(rotação e translação) de um vetor fixado entre os dois frames.
+Podemos representá-la no formato matricial, utilizando coordenadas
+homogêneas (com uma dimensão extra igual à unidade), como segue:
 
 \begin{equation}
     \begin{bmatrix}
@@ -138,14 +48,19 @@ utilizando-se a seguinte formulação matricial:
     \end{bmatrix} \begin{bmatrix}
         p^1 \\
         1
-    \end{bmatrix} \ \ , R_1^0 \in SO(3) \ \ , o_1^0 \in \mathbb{R}^3
+    \end{bmatrix}
 \end{equation}
 
-onde vemos que os elementos de \(SE(3)\) são matrizes de dimensão \(4 \times
-4\) e os vetores \(p^i\) são representados em \emph{coordenadas homogêneas }com
-uma dimensão extra. A matriz \(T_1^0\) é denominada matriz de
-\emph{transformação homogênea} e utilizando o fato de que \(R_1^0\) é uma
-matriz ortogonal, podemos facilmente calcular sua inversa:
+ou numa notação mais compacta:
+
+\begin{equation}
+    \tilde{p^0} = T_1^0 \ \tilde{p^1}
+\end{equation}
+
+A matriz \(T_1^0\) de dimensão \(4 \times 4\) é denominada
+\emph{matriz de transformação homogênea} e tem a característica
+de que a sua inversa pode ser calculada através das componentes
+de rotação e translação que compõe o deslocamento rígido:
 
 \begin{equation}
     {(T_1^0)}^{-1} = \begin{bmatrix}
@@ -159,152 +74,20 @@ matriz ortogonal, podemos facilmente calcular sua inversa:
 
 \section{Cinemática Direta}
 
-O problema da cinemática em manipuladores consiste em descrever o movimento do
-manipulador sem considerar as forças e torques atuantes sob o mesmo
-tratando-se, portanto, de uma descrição puramente geométrica. Neste contexto,
-uma pergunta natural que surge é como podemos determinar a posição e orientação
-do efetuador final na cadeia cinemática dado um conjunto arbitrário de ângulos
-articulados. Este problema é conhecido na robótica como a cinemática direta de
-um manipulador e pode ser facilmente resolvido se associarmos a cada corpo
-rígido da cadeia um sistema de coordenadas (\emph{frame}), expressando também
-as relações entre esses \emph{frames} como transformações homogêneas. A pose do
-efetuador final fica determinada através de uma série de multiplicações
-matriciais. A colocação de \emph{frames} pode ser feita de maneira sistemática
-através da utilização da convenção de Denavit-Hartenberg a qual fornece uma
-abordagem concisa para representar a estrutura geométrica do manipulador.
+Na robótica, uma cadeia cinemática é uma série de corpos rígidos conectados por 
+juntas que permitem movimento relativo das partes móveis de um manipulador. 
+Cadeias cinemáticas formam a base do estudo de manipuladores robóticos e geralmente 
+são representadas por um grafo onde nós representam os elos e as arestas 
+representam as juntas. As cadeias podem ser classificadas como seriais abertas, 
+paralelas ou fechadas, dependendo da topologia do grafo. Neste trabalho, 
+focamos em cadeias abertas, as mais comuns em manipuladores robóticos industriais.
 
-\subsection{Cadeias cinemáticas}
-
-Na robótica, uma cadeia cinemática pode ser definida como uma série de corpos
-rígidos, também denominados \emph{elos}, conectados por \emph{juntas} que
-permitem um movimento relativo das diferentes partes móveis de um manipulador.
-Cadeias cinemáticas formam a base do estudo de manipuladores robóticos e
-geralmente são representadas através de um grafo onde seus nós constituem os
-elos e as arestas as juntas.
-
-Dependendo da topologia desse grafo, podemos classificar uma cadeia cinemática
-de diferentes formas. Numa cadeia serial aberta seu grafo consiste numa árvore
-onde cada nó possui apenas um único filho e o nó terminal da árvore usualmente
-representa o efetuador final (onde uma pinça ou garra robótica ficaria
-acoplada, por exemplo). Outros casos incluem grafos com ramificações (existe
-mais de um nó terminal) onde denominamos de cadeia paralela ou quando há a
-presença de ciclos onde temos uma cadeia fechada. Neste trabalho, iremos nos
-limitar à análise de cadeias abertas, as mais comuns no âmbito de manipuladores
-robóticos utilizados em aplicações industriais.
-
-Os tipos de juntas presentes no cadeia também são importantes na definição do
-alcance e natureza do movimento do manipulador. As mais simples são as juntas
-prismáticas e de revolução, cada uma introduzindo um único grau de liberdade ao
-sistema. Juntas prismáticas permitem o movimento translacional ao longo de uma
-única direção enquanto que juntas de revolução possibilitam um movimento
-rotacional ao redor de um eixo específico.
-
-Ademais das juntas básicas, tipos mais complexos incluem juntas esféricas, que
-introduzem dois graus de liberdade (rotação ao redor de dois eixos
-perpendiculares) e punhos esféricos, compostos por três juntas revolutas
-dispostas ortogonalmente, introduzindo três graus de liberdade ao sistema. Vale
-ressaltar que independente da complexidade da junta, a maior parte pode ser
-reduzida a uma combinação dos dois tipos mais simples tornando suficiente a
-descrição de cadeias cinemáticas por meio de uma combinação de juntas
-prismáticas ou de revolução.
-
-Um manipulador robótico com $n$ juntas terá $n + 1$ elos, uma vez que cada
-junta conecta exatamente dois elos. Iremos enumerar as juntas de $1$ até $n$ e
-elos de $0$ a $n$ sendo que o elo de número $0$ representará a base do
-manipulador e elo $n$ seu efetuador final. De acordo com essa convenção a junta
-$i$ conecta os elos $i - 1$ ao $i$ e tem sua posição fixa com respeito ao elo
-anterior. Quando a junta $i$ é atuada, o elo $i$ se movimenta de modo que a
-base permanece fixa independente de qual junta é movimentada.
-
-Iremos associar à $i$-ésima junta uma variável $q_i$ representando no caso de
-uma junta de revolução o ângulo de rotação e no caso de uma junta prismática o
-deslocamento linear:
-
-\begin{equation}
-    q_i =
-    \begin{cases}
-        \theta_i & \text{se a junta $i$ é de revolução} \\
-        d_i      & \text{se a junta $i$ é prismática}   \\
-    \end{cases}
-\end{equation}
-
-A análise cinemática é feita anexando ao elo $i$ da cadeia o sistema de
-coordenadas $o_i x_i y_i z_i$. O \emph{frame} $o_0 x_0 y_0 z_0$ associado à
-base do manipulador é denominado \emph{frame} da base, inercial ou do mundo. Se
-$A_i(q_i)$ é a matriz de transformação homogênea que fornece a posição e
-orientação de $o_i x_i y_i z_i$ com relação a $o_{i-1} x_{i-1} y_{i-1} z_{i-1}$
-então podemos dizer que a mesma é função unicamente da variável $q_i$ de modo
-que:
-
-\begin{equation}
-    A(q_i) = A_i = \begin{bmatrix}
-        R^{i-1}_i & o^{i-1}_i \\
-        0         & 1
-    \end{bmatrix}
-\end{equation}
-
-Dessa forma, para $i < j$, a matriz $T_j^i$ dada por:
-
-\begin{equation}
-    T_j^i = A_{i+1} \cdots A_j = \begin{bmatrix}
-        R^i_j & o^i_j \\
-        0     & 1
-    \end{bmatrix}
-\end{equation}
-
-expressa a orientação $R^i_j$ e posição $o^i_j$ de $o_j x_j y_j z_j$ com
-relação a $o_i x_i y_i z_i$. Vale ressaltar que a matriz $R^i_j$ é calculada
-através da multiplicação matricial:
-
-\begin{equation}
-    R^i_j = R^i_{i+1} \cdots R^{j-1}_j
-\end{equation}
-
-e o vetor de posição utilizando-se a seguinte equação recursiva:
-
-\begin{equation}
-    o^i_j = o^i_{j-1} + R^i_{j-1}o^{j-1}_j
-\end{equation}
-
-O problema da cinemática direta pode ser então formulado como o simples cálculo
-da matriz $T^0_n$ que expressa a pose do efetuador final com relação ao
-\emph{frame} da base:
-
-\begin{equation}\label{eq:fkine}
-    T^0_n = A_1 A_2 \cdots A_n = \begin{bmatrix}
-        R^0_n & o^0_n \\
-        0     & 1
-    \end{bmatrix}
-\end{equation}
-
-Tendo em vista a infinidade de possibilidades de se anexar os \emph{frames} em
-cade elo, para poder calcular as matrizes $A_i$ de forma mais precisa, vamos
-estabelecer uma convenção utilizando para isso os parâmetros introduzidos por
-Denavit e Hartenberg.
-
-\subsection{Convenção de Denavit-Hartenberg}
-
-A fixação de frames em cada elo pode ser feita de maneira arbitrária para se
-obter as matrizes de transformação $A_i$, permitindo assim o cálculo da
-cinemática direta. Contudo, o processo de determinação das mesmas matrizes para
-um manipulador com $n$ elos começa a ser tornar cada vez mais complexo a medida
-que $n$ cresce. A a convenção de Denavit-Hartenberg consiste numa abordagem
-sistemática para a obtenção das matrizes $A_i$ de modo a representar a relação
-entre frames consecutivos da forma mais concisa o possível além de propiciar
-uma padronização de como pesquisadores descrevem a estrutura cinemática de um
-manipulador robótico.
-
-De maneira geral, para especificar a matriz de transformação homogênea seriam
-necessários 6 parâmetros: três deslocamentos para a componente de translação e
-três ângulos para a rotação. Na convenção de Denavit-Hartenberg, a matriz de
-transformação $A_i$ associada ao $i$-ésimo elo é descrita através de apenas 4
-parâmetros. Isso é obtido através da introdução de duas restrições na colocação
-dos frames em cada elo:
-
-\begin{itemize}
-    \item (\textbf{DH1}) $x_i$ intersecta o eixo $z_{i-1}$
-    \item (\textbf{DH2}) $x_i$ é perpendicular o eixo $z_{i-1}$
-\end{itemize}
+As juntas prismáticas e de revolução são os tipos mais simples e introduzem um 
+único grau de liberdade ao sistema. Juntas prismáticas permitem movimento 
+translacional ao longo de uma direção, enquanto juntas de revolução possibilitam 
+movimento rotacional ao redor de um eixo específico. Independentemente da 
+complexidade das juntas, a maioria pode ser reduzida a uma combinação de juntas 
+prismáticas e de revolução, facilitando a descrição das cadeias cinemáticas.
 
 \begin{figure}
     \centering
@@ -312,50 +95,39 @@ dos frames em cada elo:
     \caption{Atribuição de \emph{frames} de acordo com a convenção de Denavit-Hartenberg. Adaptado de~\cite{spong_robot_2020}.}\label{fig:dh-assignment}
 \end{figure}
 
-O cálculo da matriz $A_i$ fica condicionado à determinação dos parâmetros:
-$\theta_i$ (joint angle), $d_i$ (link offset), $a_i$ (link length) e $\alpha_i$
-(link twist). Como $A_i$ é função da única variável da junta, três parâmetros
-são sempre fixos, dependendo apenas da geometria existente entre os frames,
-enquanto o quarto parâmetro é livre: $\theta_i$, no caso de uma junta de
-revolução e $d_i$, no caso de uma junta prismática. Em posse dos parâmetros
-obtidos para cada par de elos consecutivos, o cálculo da matriz $A_i$ é obtido
-através da relação:
+Para calcular a cinemática direta, associamos a cada elo \(i\) um frame 
+\(o_i x_i y_i z_i\) e usamos a matriz de transformação homogênea \(A_i(q_i)\), que 
+fornece a posição e orientação de \(o_i x_i y_i z_i\) em relação a 
+\(o_{i-1} x_{i-1} y_{i-1} z_{i-1}\). Para um manipulador com \(n\) juntas a sua configuração é dada pelo vetor \(q = [q_1 \ q_2 \ \ldots \ q_n]^\top\)
+e a matriz de transformação homogênea \(T^0_n\) que expressa a pose
+do efetuador final em relação ao frame da base é dada pela multiplicação matricial:
 
-\begin{align}
-    A_i & = Rot_z(\theta_i) \cdot Trans_z(d_i) \cdot Trans_x(a_i) \cdot Rot_x(\alpha_i)             \\
-    A_i & = \begin{bmatrix}
-                c_{\theta_i} & -s_{\theta_i} & 0 & 0 \\
-                s_{\theta_i} & c_{\theta_i}  & 0 & 0 \\
-                0            & 0             & 1 & 0 \\
-                0            & 0             & 0 & 1
-            \end{bmatrix} \begin{bmatrix}
-                              1 & 0 & 0 & 0   \\
-                              0 & 1 & 0 & 0   \\
-                              0 & 0 & 1 & d_i \\
-                              0 & 0 & 0 & 1
-                          \end{bmatrix} \notag                                                    \\
-        & \phantom{=} \times \ \ \begin{bmatrix}
-                                     1 & 0 & 0 & a_i \\
-                                     0 & 1 & 0 & 0   \\
-                                     0 & 0 & 1 & 0   \\
-                                     0 & 0 & 0 & 1
-                                 \end{bmatrix} \begin{bmatrix}
-                                                   1 & 0            & 0             & 0 \\
-                                                   0 & c_{\alpha_i} & -s_{\alpha_i} & 0 \\
-                                                   0 & s_{\alpha_i} & c_{\alpha_i}  & 0 \\
-                                                   0 & 0            & 0             & 1
-                                               \end{bmatrix} \notag                 \\
-    A_i & = \begin{bmatrix}
-                c_{\theta_i} & -s_{\theta_i}c_{\alpha_i} & s_{\theta_i}s_{\alpha_i}  & a_i c_{\theta_i} \\
-                s_{\theta_i} & c_{\theta_i}c_{\alpha_i}  & -c_{\theta_i}s_{\alpha_i} & a_i s_{\theta_i} \\
-                0            & s_{\alpha_i}              & c_{\alpha_i}              & d_i              \\
-                0            & 0                         & 0                         & 1
-            \end{bmatrix} \label{eq:dh-matrix}
+\begin{equation}\label{eq:fkine}
+    T^0_n(q) = A_1(q_1) A_2(q_2) \cdots A_n(q_n) = \begin{bmatrix}
+        R^0_n & o^0_n \\
+        0     & 1
+    \end{bmatrix}
+\end{equation}
+
+Apesar da colocação de frames em cada elo ser arbitrária, Jacques Denavit e Richard Hartenberg
+introduziram uma convenção padronizada para fixação dos frames fornecendo uma representação mínima das transformações 
+utilizando apenas 4 parâmetros~\cite{denavit1955}: ângulo da junta  (\(\theta_i\)), deslocamento do elo (\(d_i\)), comprimento do elo (\(a_i\)) e 
+torção do elo (\(\alpha_i\)).
+
+\begin{align}~\label{eq:dh-matrix}
+    A_i & = Rot_z(\theta_i) \cdot Trans_z(d_i) \cdot Trans_x(a_i) \cdot Rot_x(\alpha_i)             
 \end{align}
 
-onde $c_{\cdot}$ e $s_{\cdot}$ denotam $\cos(\cdot)$ e $\sin(\cdot)$,
-respectivamente. A tabela~\ref{tab:dh-parameters} descreve de maneira detalhada
-a definição de cada parâmetro de Denavit-Hartenberg.
+Tal representação mínima só é possível devido a introdução de 
+duas restrições na colocação dos frames em cada elo~\cite{spong_robot_2020}:
+
+\begin{itemize}
+    \item (\textbf{DH1}) $x_i$ intersecta o eixo $z_{i-1}$
+    \item (\textbf{DH2}) $x_i$ é perpendicular o eixo $z_{i-1}$
+\end{itemize}
+
+A tabela~\ref{tab:dh-parameters} descreve de maneira detalhada
+a definição de cada parâmetro na \emph{convenção Denavit-Hartenberg} (DH).
 
 \begin{table}[htbp]
     \centering
@@ -457,17 +229,13 @@ relação ao frame da base é dada pela soma dos ângulos das juntas: $\psi =
 \section{Cinemática Diferencial}
 
 Na seção anterior vimos como podemos estabelecer uma relação entre a
-configuração de um manipulador com $n$ juntas com a pose do efetuador final no
-espaço SE3. Nesta seção, iremos investigar de que forma se dá a relação de um
-vetor de velocidades no espaço das juntas com a velocidade do efetuador final
-no espaço de trabalho. Iremos ver que a matriz Jacobiana, atuando como uma
-generalização da derivada para o caso multidimensional, é responsável por
-estabelecer um mapeamento linear entre as velocidades e tem papel crucial na
-caracterização da qualidade do movimento de um manipulador através da análise
-das singularidades cinemáticas. Por fim, iremos analisar o problema da
-cinemática inversa diferencial, uma aplicação direta do mapeamento estabelecido
-pela matriz Jacobiana, proporcionando a geração eficiente de trajetórias
-cartesianas (retilíneas) no espaço de trabalho do manipulador.
+configuração de um manipulador com $n$ juntas e a pose do efetuador final no
+espaço SE3. Nesta seção iremos ver como a matriz jacobiana, uma generalização 
+da derivada para o caso multidimensional, é responsável por estabelecer um 
+mapeamento linear entre um vetor de velocidades no espaço das juntas com a 
+velocidade do efetuador no espaço de trabalho. Por fim, iremos analisar o 
+problema da cinemática inversa diferencial, proporcionando a geração de trajetórias 
+cartesianas, no espaço de trabalho do manipulador.
 
 \subsection{A Jacobiana do Manipulador}
 
@@ -517,96 +285,6 @@ O vetor \(\xi\) de dimensão \(6 \times 1\) é denominado de velocidade do corpo
 rígido (em inglês \emph{body velocity} ou \emph{twist}). Note também que a
 matriz \(J\), chamada \emph{jacobiana do manipulador} ou simplesmente
 jacobiana, é usualmente uma matriz de dimensão \(6 \times n\).
-
-O cálculo da jacobiana, pode ser feito de maneira simples e sistemática ao
-analisarmos as componentes angular e linear separadamente. No primeiro caso,
-sabemos que a velocidade angular do efetuador final pode ser obtida através da
-soma sucessiva das velocidades angulares de cada elo:
-
-\begin{equation}\label{eq:angular-velocity}
-    \omega_n^0 = \omega_{1}^0 + \omega_{2}^0 + \cdots + \omega_n^{0}
-\end{equation}
-
-Se a junta \(i\) é prismática não há rotação em torno do eixo \(z_{i-1}\) de
-modo que \(\omega_i^{i-1} = 0\). Caso contrário, se a junta \(i\) é de
-revolução a rotação dá se em torno do eixo $z_{i-1}$ com magnitude $\dot{q}_i$
-de modo que:
-
-\begin{equation}
-    \omega_i^{0} = \dot{q_i} z_{i-1}^{0}
-\end{equation}
-
-onde obviamente teremos \(z_{0}^{0} = k = \begin{bmatrix}
-    0 & 0 & 1
-\end{bmatrix}^\top\)
-
-A orientação do eixo \(z_{i}\) com relação ao \emph{frame} da base é dada por
-\(z_{i}^0 = R_{i}^0 k\), então substituindo na equação
-(\ref{eq:angular-velocity}) podemos escrever:
-
-\begin{equation}
-    \omega_n^0 = \rho_1 \dot{q_1} k + \rho_2 \dot{q_2} R_1^0 k + \cdots + \rho_n \dot{q_n} R_{n-1}^0 k
-\end{equation}
-
-onde \(\rho_i = 0\) se a junta \(i\) é prismática e \(\rho_i = 1\) caso
-contrário. Fica claro então que a metade inferior da jacobiana é dada por:
-
-\begin{equation}
-    J_\omega = \begin{bmatrix}
-        \rho_1 k & \rho_2 R_1^0 k & \cdots & \rho_n R_{n-1}^0 k
-    \end{bmatrix}
-\end{equation}
-
-A metade superior da jacobiana é obtida calculando-se o vetor \(\dot{o}_n^0\).
-Aplicando a regra da cadeia, temos:
-
-\begin{equation}\label{eq:linear-velocity}
-    \dot{o}_n^0 = \frac{\partial o_n^0}{\partial q_1} \dot{q_1} + \frac{\partial o_n^0}{\partial q_2} \dot{q_2} + \cdots + \frac{\partial o_n^0}{\partial q_n} \dot{q_n}
-\end{equation}
-
-onde fica claro que a i-ésima coluna de \(J_v\) é dada por:
-
-\begin{equation}
-    J_{v_i} = \frac{\partial o_n^0}{\partial q_i}
-\end{equation}
-
-Para obter a expressão de \(J_{v_i}\) vamos analisar novamente o caso de juntas
-prismáticas e de revolução separadamente. No caso de uma única junta
-prismática, então o efetuador final apresenta apenas translação ao longo do
-eixo \(z_{i-1}\) de modo que:
-
-\begin{equation}
-    \dot{o}_n^0 = \dot{q_i} R_{i-1}^0 \begin{bmatrix}
-        0 \\
-        0 \\
-        1
-    \end{bmatrix} = \dot{q_i} z_{i-1}^0
-\end{equation}
-
-Comparando com a (\ref{eq:angular-velocity}) vemos que:
-
-\begin{equation}
-    J_{v_i} = z_{i-1}^0
-\end{equation}
-
-Já para o caso de uma junta de revolução, a velocidade linear do efetuador
-final devido ao movimento do elo \(i\) é da forma \(\omega \times r\) dada pela
-sua componente tangencial ao círculo de centro no ponto \(o_{i-1}\) e
-extremidade no ponto \(o_n\) onde:
-
-\begin{align*}
-    \omega & = \dot{q_i} z_{i-1}^0 \\
-    r      & = o_n^0 - o_{i-1}^0
-\end{align*}
-
-onde finalmente chegamos à expressão:
-
-\begin{equation}
-    J_{v_i} = z_{i-1}^0 \times (o_n^0 - o_{i-1}^0)
-\end{equation}
-
-Resumindo as equações obtidas acima, podemos calcular a jacobiana de qualquer
-manipulador serial utilizando o seguinte procedimento:
 
 A parte superior da matriz jacobiana \(J_v\) será:
 
@@ -736,7 +414,7 @@ Configurações paras as quais o posto da matriz jacobiana é menor que o máxim
 possível (em inglês \emph{rank deficiency}) são denominadas de
 \emph{singularidades} ou configurações singulares. Identificar configurações
 singulares é de grande importância para o controle de manipuladores por
-diversos motivos, entre eles~\cite[p. 122--123]{spong_robot_2020}:
+diversos motivos, entre eles~\cite{spong_robot_2020}:
 
 \begin{itemize}
     \item Singularidades representam configurações nas quais a mobilidade do manipulador
@@ -797,7 +475,7 @@ amostragem).
 O esquema de controle descrito acima é conhecido como \emph{Resolved Rate Motion Control} (RRMC), o qual consegue de 
 maneira simples e elegante o solucionar o problema de gerar movimentos no efetuador final de velocidade constante sem recorrer à
 soluções numéricas ou analíticas para o cálculo da cinemática inversa~\cite{corke_robotics_2023}. 
-Tal esquema é útil na geração de trajetórias retilíneas no espaço de trabalho,
+Tal esquema é útil na geração de trajetórias cartesianas no espaço de trabalho,
 conhecidas como trajetórias cartesianas, uma vez que a componente translacional
 da velocidade do efetuador final tem direção constante ao longo de todo o
 trajeto pode ser tratada de maneira independente da componente rotacional.
@@ -857,24 +535,23 @@ um de otimização linear com restrições, onde a solução ótima é obtida mi
 o custo quadrático das velocidades das juntas:
 
 \begin{equation}
-    \min_{\dot{q}} \left\Vert \dot{q} \right\Vert^2 \text{ sujeito a } J \dot{q} = \xi
+    \min_{\dot{q}} \left\Vert \dot{q} - \dot{q_0} \right\Vert^2 \text{ sujeito a } J \dot{q} = \xi
 \end{equation}
 
-Pode ser mostrado que nesse caso, a solução ótima é dada por:
+onde \(\dot{q_0}\) é um vetor de velocidades arbitrário. Pode ser mostrado que nesse caso, 
+a solução ótima é dada por~\cite{siciliano_robotics_2009}:
 
 \begin{equation}\label{eq:pseudo-inverse}
     \dot{q} = J^\dag \xi + (I_n - J^\dag J) \dot{q_0}
 \end{equation}
 
-onde \(\dot{q_0}\) é um vetor de velocidades arbitrário e a matriz \(J^\dag\) é
-conhecida como \emph{matriz inversa de Moore-Penrose} ou apenas
+onde a matriz \(J^\dag\) é conhecida como \emph{matriz inversa de Moore-Penrose} ou apenas
 \emph{pseudo-inversa} de \(J\) e é dada por:
 
 \begin{equation}
     J^\dag = J^\top {(J J^\top)}^{-1}
 \end{equation}
 
-Para uma demonstração completa desse resultado, o leitor aconselhado consultar~\cite[p. 124 -- 125]{siciliano_robotics_2009}.
 Vale notar que o termo \(I_n - J^\dag J\) atua projetando o vetor \(\dot{q_0}\)
 no espaço nulo de \(J\). Com efeito, aplicando a jacobiana à esquerda na
 equação (\ref{eq:pseudo-inverse}) temos:
@@ -973,8 +650,8 @@ aproximamos do limite do espaço de trabalho.
 
 Ao estabelecermos a solução geral dada pela equação (\ref{eq:pseudo-inverse}),
 dissemos que o vetor \(\dot{q_0}\) pode ser escolhido arbitrariamente. Uma
-possibilidade é tomá-lo de forma a maximar algum índice de performance \(w\),
-para isso escolhendo o vetor na direção do gradiente~\cite[p. 126 -- 127]{siciliano_robotics_2009}:
+possibilidade é tomá-lo de forma a maximizar algum índice de performance \(w\),
+para isso escolhendo o vetor na direção do gradiente~\cite{siciliano_robotics_2009}:
 
 \begin{equation}\label{eq:metric-gradient}
     \dot{q_0} = k_0 {\left( \frac{\partial w(q)}{\partial q} \right)}^\top
@@ -983,7 +660,7 @@ para isso escolhendo o vetor na direção do gradiente~\cite[p. 126 -- 127]{sici
 onde \(k_0 > 0\) é uma constante positiva que determina o tamanho do passo.
 
 Uma escolha natural para o índice de performance \(w\) é a \emph{medida de
-    manipulabilidade de Yoshikawa}:
+    manipulabilidade de Yoshikawa}~\cite{yoshikawa1983}:
 
 \begin{equation}\label{eq:yoshikawa}
     w(q) = \sqrt{\det(J(q){J(q)}^\top)}
@@ -1010,16 +687,16 @@ de maneira analítica onde cada coordenada é dada por:
 \end{equation}
 
 Outro ponto a salientar é que a escolha do tamanho do passo \(k_0\) é crucial
-para a performance do algoritmo~\cite[p. 256]{siciliano_springer_2008}. Se \(k_0\) 
+para a performance do algoritmo~\cite{siciliano_springer_2008}. Se \(k_0\) 
 for muito pequeno o processo de otimização pode se tornar muito lento, enquanto 
 que se \(k_0\) for muito grande isso pode a uma diminuição ou até
  mesmo não convergência do valor de \(w\) devido a oscilações em torno do ponto 
  de máximo local.
 
 No próximo capítulo, iremos aplicar os conceitos apresentados até agora na
-conecepção de um ambiente simulado para um manipulador redundante com cinco
+concepção de um ambiente simulado para um manipulador redundante com cinco
 graus de liberdade. O objetivo principal será a execução de trajetórias
-retilíneas no espaço de trabalho \(\mathcal{T} \in \text{SE}(3)\) que levam
+cartesianas no espaço de trabalho \(\mathcal{T} \in \text{SE}(3)\) que levam
 apenas em consideração a posição do efetuador e com isso explorar a resolução
 de redundância para otimizar diferentes índices relacionados a configuração do
 manipulador durante a execução da trajetória.

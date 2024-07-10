@@ -4,7 +4,7 @@ Este capítulo apresenta os resultados obtidos a partir da simulação da
 execução de trajetórias cartesianas para o manipulador 5R utilizando o esquema 
 de controle RRC. Em cada cenário, foi realizado um conjunto de 4 execuções de 
 uma mesma trajetória variando-se o ganho \(k_0\), com o objetivo de avaliar 
-a eficácia do controlador em otimizar os indíces de desempenho fornecidos, submetido 
+a eficácia do controlador em otimizar os índices de desempenho fornecidos, submetido 
 a diferentes restrições cinemáticas.
 
 \section{Cenário 1}
@@ -28,7 +28,7 @@ mostrando que a restrição primária não é violada.
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{./Images/2024-06-11-09-23-42/joint_states_joint_distance.pdf}
-	\caption{Diferentes valores do ganho, influeciam diretamente na velocidade de convergência para a solução particular.}\label{fig:exp1-joint-states}
+	\caption{Diferentes valores do ganho, influenciam diretamente na velocidade de convergência para a solução particular.}\label{fig:exp1-joint-states}
 \end{figure}
 
 \begin{figure}
@@ -63,18 +63,18 @@ alta possível, sem violar a restrição primária.
 Observamos novamente que o efeito de introduzir valores crescentes do ganho afeta o erro de posição 
 com um pequeno \emph{trade-off} entre a otimização da métrica e a precisão no controle da posição 
 do efetuador final (tabelas \ref*{tab:scores-exp2} e \ref*{tab:scores-exp3}), tendo em vista o aumento das 
-velocidades das juntas. Esse fato pode ser melhor observado nas figuras \ref*{fig:exp3-joint-states} e 
+velocidades das juntas. Esse fenômeno pode ser melhor observado nas figuras \ref*{fig:exp3-joint-states} e 
 \ref*{fig:exp3-error}, onde a velocidade das juntas aumenta significativamente ao longo da execução da trajetória, 
-e o erro se matém consistemente maior a medida que o ganho \(k_0\) aumenta. Isso pode ser explicado pelo fato 
+e o erro se mantém maior a medida que o ganho \(k_0\) aumenta. Isso pode ser explicado pelo fato 
 de que a métrica de desempenho, nesse caso a distância das juntas (figura \ref*{fig:exp3-metric}), é otimizada como um objetivo secundário 
 à restrição imposta por \(\xi\), e a escolha de trajetórias onde os valores da métricas estão muito distantes
- do valor ótimo, acabam tornando o processo de otimização mais díficil, necessitando assim um valor de \(k_0\) 
+ do valor ótimo, acabam tornando o processo de otimização mais difícil, necessitando assim um valor de \(k_0\) 
  maior para convergir para a solução ótima.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{./Images/2024-06-11-09-17-48/metric_manipulability.pdf}
-	\caption{Manipulabilidade em função do tempo para cada trahjetória executada no segundo cenário.}\label{fig:exp2-metric}
+	\caption{Manipulabilidade em função do tempo para cada trajetória executada no segundo cenário.}\label{fig:exp2-metric}
 \end{figure}
 
 \begin{table}[htbp]
