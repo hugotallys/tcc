@@ -60,16 +60,35 @@ a manipulabilidade muda ao longo da execução da trajetória, aproximando-se de
 A resolução de redundância atualiza a configuração do manipulador de modo manter a manipulabilidade o mais 
 alta possível, sem violar a restrição primária.
 
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./Images/final-config-no-gain.png}
+        \caption{Configuração final para \(k_0 = 0\).}
+        \label{fig:subfig1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./Images/final-config-max-gain.png}
+        \caption{Configuração final para \(k_0 = 800\).}
+        \label{fig:subfig2}
+    \end{subfigure}
+    \caption{Configuração final do manipulador nos experimentos do segundo cenário (métrica distância das juntas).}
+    \label{fig:mainfigure}
+\end{figure}
+
 Observamos novamente que o efeito de introduzir valores crescentes do ganho afeta o erro de posição 
 com um pequeno \emph{trade-off} entre a otimização da métrica e a precisão no controle da posição 
 do efetuador final (tabelas \ref*{tab:scores-exp2} e \ref*{tab:scores-exp3}), tendo em vista o aumento das 
 velocidades das juntas. Esse fenômeno pode ser melhor observado nas figuras \ref*{fig:exp3-joint-states} e 
 \ref*{fig:exp3-error}, onde a velocidade das juntas aumenta significativamente ao longo da execução da trajetória, 
 e o erro se mantém maior a medida que o ganho \(k_0\) aumenta. Isso pode ser explicado pelo fato 
-de que a métrica de desempenho, nesse caso a distância das juntas (figura \ref*{fig:exp3-metric}), é otimizada como um objetivo secundário 
-à restrição imposta por \(\xi\), e a escolha de trajetórias onde os valores da métricas estão muito distantes
- do valor ótimo, acabam tornando o processo de otimização mais difícil, necessitando assim um valor de \(k_0\) 
- maior para convergir para a solução ótima.
+de que a métrica de desempenho, nesse caso a distância das juntas (figura \ref*{fig:exp3-metric}), é otimizada como 
+um objetivo secundário à restrição imposta por \(\xi\), e a escolha de trajetórias onde os valores da métricas estão 
+muito distantes do valor ótimo, acabam tornando o processo de otimização mais difícil, necessitando assim um valor 
+de \(k_0\) maior para convergir para a solução ótima.
 
 \begin{figure}
 	\centering

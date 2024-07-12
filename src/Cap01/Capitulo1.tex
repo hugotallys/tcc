@@ -1,63 +1,36 @@
 \chapter{Introdução}\label{cap:introduction}
 
 A redundância cinemática na robótica refere-se ao uso de graus de liberdade (DOF) adicionais além do mínimo necessário para executar uma
-tarefa específica. Em robôs industriais e manipuladores, singularidades cinemáticas ocorrem quando a configuração do robô resulta na perda de um ou mais DOFs, 
-reduzindo sua capacidade de movimento. De maneira mais precisa, isso significa que há alguma direção (ou subespaço) no espaço cartesiano ao longo da qual é 
-impossível mover o efetuador final, independentemente das velocidades empenhadas nas juntas~\cite{craig2004}. A importância da redundância está na capacidade de 
-fornecer caminhos alternativos para o planejamento de movimentos, permitindo que o robô manobre ao redor de configurações singulares, mantendo a eficiência 
-operacional e a segurança. Essa flexibilidade assegura que o robô continue a executar suas tarefas mesmo próximo a pontos singulares, comuns em tarefas complexas. Além disso, a resolução
-de redundância possibilita a otimização de outros critérios de desempenho, como minimizar o consumo de energia, reduzir o desgaste, melhorar a precisão e
-aumentar a capacidade de evasão de obstáculos.
+tarefa específica. Em robôs industriais e manipuladores, singularidades cinemáticas ocorrem quando a configuração do robô resulta na perda
+de um ou mais DOFs, reduzindo sua capacidade de movimento. De maneira mais precisa, isso significa que há alguma direção (ou subespaço) 
+no espaço cartesiano ao longo da qual é impossível mover o efetuador final, independentemente das velocidades empenhadas nas 
+juntas~\cite{craig2004}. 
 
-Recentemente, \cite{li2023pseudo} propuseram um esquema baseado em pseudo-inversa para controle de movimento em nível de aceleração,
-demonstrando a viabilidade do método através de simulações com o manipulador robótico PA10. Por outro lado, \cite{kuri2023som}
-abordaram a resolução de redundância através da combinação de Mapas Auto-Organizáveis (SOM) e uma matriz de Norma Mínima Ponderada
-(WLN), mostrando melhorias significativas no controle de trajetória espacial para um manipulador robótico de 5 graus de liberdade.
+A importância da redundância está na capacidade de fornecer caminhos alternativos para o planejamento de movimentos,
+permitindo que o robô manobre ao redor de configurações singulares, mantendo a eficiência operacional e a segurança. Essa flexibilidade 
+assegura que o robô continue a executar suas tarefas mesmo próximo a pontos singulares, comuns em tarefas complexas. Além disso, a resolução
+de redundância possibilita a otimização de outros critérios de desempenho, como minimizar o consumo de energia, reduzir o desgaste, melhorar 
+a precisão e aumentar a capacidade de evasão de obstáculos.
 
-% O artigo intitulado "A pseudo-inverse redundancy-based resolution scheme at the acceleration level to control robotic arm motion"~\cite{li2023pseudo} por
-% Qu Li, Naimeng Cang, Weidong Zhang, Dongsheng Guo e Canwei Zhang, propõe um novo esquema de evitação de obstáculos (OA) para manipuladores robóticos redundantes.
-% Diferentemente dos métodos tradicionais que operam no nível da velocidade das articulações, este esquema utiliza a pseudo-inversa de Jacobi no nível da aceleração
-% das articulações. O método proposto é analisado teoricamente usando uma abordagem de dinâmica de gradiente e verificado através de simulações no manipulador robótico
-% PA10. Os resultados demonstram a eficácia e viabilidade do esquema, garantindo uma evitação de obstáculos suave e precisa ao manter uma distância segura entre
-% o manipulador e os obstáculos. Isso contribui para o campo oferecendo uma abordagem computacionalmente eficiente e prática para o planejamento e controle de movimento
-% em tempo real de braços robóticos.
+Recentemente,~\cite{li2023pseudo} propuseram um novo esquema de evitação de obstáculos para manipuladores redundantes 
+baseado em na pseudo-inversa da matriz jacobiana no nível das acelerações das juntas, demonstrando a viabilidade do método através de simulações 
+com o manipulador robótico PA10 o qual possui \(7\) DOFs. Por outro lado,~\cite{kuri2023som}
+abordaram uma técnica de controle inteligente para um manipulador robótico espacial com 5 DOFs para executar
+trajetórias tridimensionais desejadas (linha, circular e elíptica) enquanto resolve a redundância 
+(evitação dos limites das juntas) mostrando que a depender da tarefa, mesmo para manipuladores com um número menor de DOFs, 
+a redundância pode ser explorada para melhorar o desempenho do robô.
 
-% O artigo intitulado "SOM Network with Weighted Least Norm Matrix Based Redundancy Resolution for a 5-DOF Spatial Robotic Manipulator"~\cite{kuri2023som} por Saumitra Kumar Kuri,
-% Kaushik Halder e M. Felix Orlando propõe uma técnica de controle inteligente para um manipulador robótico espacial de 5 graus de liberdade (DOF) para rastrear
-% trajetórias 3D desejadas enquanto resolve a redundância (evitação de limites das articulações). A estratégia de controle proposta é baseada no Mapa Auto-Organizável
-% (SOM) e no conceito de Norma Mínima Ponderada (WLN), eliminando a necessidade de computação da pseudo-inversa da matriz Jacobiana. Um estudo de simulação abrangente
-% é realizado para rastreamento de trajetórias 3D (linha, circular e elíptica). Os resultados das simulações mostram que a combinação da rede SOM e da metodologia da
-% matriz WLN pode gerar um movimento suave no espaço dos ângulos das articulações. Comparado com os algoritmos padrão existentes, como decomposição de tarefas e WLN,
-% a abordagem proposta demonstra um desempenho superior na resolução da redundância e no rastreamento de trajetórias.
+O trabalho de \cite{ancona2017} validou técnicas de resolução de redundância em diversos cenários, destacando a importância da escolha do critério de desempenho
+para direcionar o comportamento do manipulador. A metodologia proposta, baseada em um procedimento de cinemática inversa e um controlador orientado a objetos,
+mostrou-se eficaz e versátil tanto em simulações quanto na prática real. Além disso, o trabalho explorou a manipulação móvel redundante para operações hábeis 
+e interação segura entre humanos e robôs em ambientes industriais, com uma contribuição importante na arquitetura de controle de software proposta, que é escalável,
+portátil, integrável com tecnologias heterogêneas e pronta para uso em ambientes de produção.
 
-% \cite{hammond2011} O artigo intitulado "Configuring Kinematically Redundant Robotic Manipulators to Increase Effective Task-Specific Motion Resolution" por Frank L. Hammond III
-% propõe um método heurístico para configurar manipuladores robóticos com redundância cinemática, visando aumentar a precisão dos movimentos em tarefas específicas.
-% Utilizando o índice de resolução de movimento efetivo (EMR), a pesquisa demonstra como configurar manipuladores para melhorar a precisão de movimentos, especialmente
-% em tarefas de micromanipulação que exigem alta resolução e precisão de movimento. A eficácia do método é demonstrada por meio de estudos de caso em planejamento de layout
-% de workspace e otimização de design morfológico. Os resultados mostram que o índice EMR pode ser usado tanto como uma métrica de aptidão em otimização de design quanto como
-% um objetivo na resolução de redundância, melhorando significativamente a resolução de movimento em trajetórias específicas sem a necessidade de componentes de alta precisão e custo elevado.
-
-\cite{hammond2011} explorou o aumento da resolução de movimento eficaz através da configuração de manipuladores cinemáticos
-redundantes, onde a redundância cinemática é usada para otimizar a resolução de movimento para tarefas específicas, destacando o potencial dessas
-abordagens em aplicações de micromanipulação e montagem de precisão.
-
-% \cite{ancona2017} O artigo intitulado "Redundancy modelling and resolution for robotic mobile manipulators: a general approach" por Roberto Ancona aborda a modelagem e 
-% resolução de redundância cinemática para manipuladores móveis robóticos. Um conjunto de parâmetros de redundância é introduzido para definir um procedimento geral de cinemática 
-% inversa para manipuladores móveis. A redundância é tratada como um problema de otimização não-linear com o objetivo de encontrar configurações do robô que maximizem medidas métricas projetadas. 
-% Algumas estratégias para projetar a função objetivo de otimização são apresentadas para alcançar comportamentos redundantes desejáveis, como a evitação de obstáculos, 
-% redução dos movimentos da base móvel e otimização da destreza. Além disso, o controlador do robô foi desenvolvido seguindo um princípio de arquitetura de software orientado 
-% a objetos, permitindo mantê-lo geral e independente do robô. Para comprovar a confiabilidade e a generalidade da abordagem, o mesmo controlador foi utilizado para controlar
-%  vários manipuladores móveis diferentes em um ambiente de simulação, bem como um robô KUKA youBot real. Os resultados das validações experimentais mostram que a abordagem proposta 
-%  é eficaz e versátil para manipulação móvel redundante, tanto em simulações quanto na prática real.
-
-% \cite{maaroof2022} O artigo intitulado "A Robot Arm Design Optimization Method by Using a Kinematic Redundancy Resolution Technique" de Omar W. Maaroof, Mehmet İsmet Can Dede, 
-% e Levent Aydin apresenta uma técnica de otimização de design para braços robóticos utilizando resolução de redundância cinemática. Embora o braço robótico em questão não seja redundante, 
-% a técnica proposta modifica sua cinemática adicionando juntas virtuais, tornando-o cinemática e redundantemente otimizado. A metodologia introduz uma função objetivo adequada para 
-% otimizar os parâmetros cinemáticos do braço robótico, aprimorando um ou mais índices de desempenho. O braço robótico é fixado em posições críticas enquanto o algoritmo de resolução 
-% de redundância move suas juntas, incluindo as virtuais, devido ao movimento autônomo de um robô redundante. Assim, os valores ótimos das juntas virtuais são determinados, e o
-% design do braço robótico é modificado em conformidade. Uma vantagem desta metodologia é a visualização das mudanças na estrutura do manipulador durante o processo de otimização. Como 
-% estudo de caso, o artigo considera um braço robótico passivo usado em um sistema cirúrgico, com a tarefa de determinar a localização ótima da base e o comprimento do primeiro elo.
-% Os resultados indicam a eficácia do método proposto na otimização do design de braços robóticos.
+Por fim, \cite{hammond2011} propôs um método heurístico para configurar manipuladores robóticos com redundância cinemática, visando aumentar a precisão 
+dos movimentos em tarefas específicas, utilizando o índice de resolução de movimento efetivo (EMR). Os resultados mostram que o índice EMR pode ser 
+usado tanto como uma métrica de aptidão em otimização de design quanto como um objetivo na resolução de redundância,  destacando o potencial dessas
+abordagens em aplicações de micromanipulação e montagem de precisão,  melhorando significativamente a resolução de movimento em trajetórias específicas 
+sem a necessidade de componentes de alta precisão e custo elevado.
 
 \section{Motivação}\label{sec:motivation}
 
@@ -65,7 +38,7 @@ A abordagem tradicional no projeto de manipuladores teve como foco principal a m
 utilizando o número mínimo de juntas necessárias para uma executar uma determinada tarefa levando, por exemplo, ao
 desenvolvimento dos robôs \emph{Selective Compliance Assembly Robot Arm} (SCARA) para operações de \emph{pick-and-place}~\cite{siciliano_springer_2008}.
 No entanto, essa abordagem  minimalista apresenta uma série de limitações em aplicações do mundo real, onde fatores como
-limites de juntas, singularidades e obstáculos no espaço de trabalho estão presentes. Ao ter DOFs
+limites de juntas, singularidades e obstáculos no espaço de trabalho estão presentes. Ao ter mais DOFs
 do que o estritamente necessário, os manipuladores redundantes podem alcançar maior destreza e versatilidade, tornando-os
 mais adequados para ambientes complexos e dinamicamente mutáveis.
 
