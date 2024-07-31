@@ -35,8 +35,8 @@ a um frame de referência \(o_0 x_0 y_0 z_0\) pode ser expressa como:
 
 Assim, a equação \ref{eq:rigid-motion} descreve um deslocamento rígido 
 (rotação e translação) de um vetor fixado entre os dois frames.
-Podemos representá-la no formato matricial, utilizando coordenadas
-homogêneas (com uma dimensão extra igual à unidade), como segue:
+Representando-a no formato matricial, utilizando coordenadas
+homogêneas (com uma dimensão extra igual à unidade), teremos:
 
 \begin{equation}
     \begin{bmatrix}
@@ -78,9 +78,13 @@ Na robótica, uma cadeia cinemática é uma série de corpos rígidos conectados
 juntas que permitem movimento relativo das partes móveis de um manipulador. 
 Cadeias cinemáticas formam a base do estudo de manipuladores robóticos e geralmente 
 são representadas por um grafo onde nós representam os elos e as arestas 
-representam as juntas. As cadeias podem ser classificadas como seriais abertas, 
-paralelas ou fechadas, dependendo da topologia do grafo. Neste trabalho, 
-focamos em cadeias abertas, as mais comuns em manipuladores robóticos industriais.
+representam as juntas. Dependendo da topologia desse grafo, classifica-se 
+uma cadeia cinemática de diferentes formas. Cadeias seriais do tipo aberta
+são as mais comuns no âmbito de manipuladores robóticos utilizados 
+em aplicações industriais. Nesses casos, seu grafo é representado por uma árvore 
+onde cada nó possui apenas um único filho e o nó terminal da 
+árvore usualmente representa o efetuador final (onde uma pinça ou garra robótica ficaria
+acoplada, por exemplo).
 
 As juntas prismáticas e de revolução são os tipos mais simples e introduzem um 
 único grau de liberdade ao sistema. Juntas prismáticas permitem movimento 
@@ -95,11 +99,11 @@ prismáticas e de revolução, facilitando a descrição das cadeias cinemática
     \caption{Atribuição de \emph{frames} de acordo com a convenção de Denavit-Hartenberg. Adaptado de~\cite{spong_robot_2020}.}\label{fig:dh-assignment}
 \end{figure}
 
-Para calcular a cinemática direta, associamos a cada elo \(i\) um frame 
-\(o_i x_i y_i z_i\) e usamos a matriz de transformação homogênea \(A_i(q_i)\), que 
-fornece a posição e orientação de \(o_i x_i y_i z_i\) em relação a 
+Para calcular a cinemática direta, a cada elo \(i\) da cadeia é associado um frame 
+\(o_i x_i y_i z_i\). Através da matriz de transformação homogênea \(A_i(q_i)\), expressa-se 
+a pose de \(o_i x_i y_i z_i\) em relação a 
 \(o_{i-1} x_{i-1} y_{i-1} z_{i-1}\). Para um manipulador com \(n\) juntas a sua configuração é dada pelo vetor \(q = [q_1 \ q_2 \ \ldots \ q_n]^\top\)
-e a matriz de transformação homogênea \(T^0_n\) que expressa a pose
+e a matriz de transformação homogênea \(T^0_n\) que fornece a pose
 do efetuador final em relação ao frame da base é dada pela multiplicação matricial:
 
 \begin{equation}\label{eq:fkine}
@@ -112,7 +116,8 @@ do efetuador final em relação ao frame da base é dada pela multiplicação ma
 Apesar da colocação de frames em cada elo ser arbitrária, Jacques Denavit e Richard Hartenberg
 introduziram uma convenção padronizada para fixação dos frames fornecendo uma representação mínima das transformações 
 utilizando apenas 4 parâmetros~\cite{denavit1955}: ângulo da junta  (\(\theta_i\)), deslocamento do elo (\(d_i\)), comprimento do elo (\(a_i\)) e 
-torção do elo (\(\alpha_i\)).
+torção do elo (\(\alpha_i\)). A figura~\ref{fig:dh-assignment} ilustra a relação entre dois \emph{frames} de uma cadeia cinemática que segue tal convenção, 
+fornecendo uma interpretação geométrica de cada parâmetro.
 
 \begin{align}~\label{eq:dh-matrix}
     A_i & = Rot_z(\theta_i) \cdot Trans_z(d_i) \cdot Trans_x(a_i) \cdot Rot_x(\alpha_i)             
@@ -174,10 +179,8 @@ manipulador é dada por:
 
 Dados os valores fixos \(a_i\) que indicam o comprimento do elo \(i\), as
 únicas variáveis livres no cálculo da cinemática direta são os ângulos das
-juntas ($q_i = \theta_i$), desse modo, vamos denotar \(\theta_1 + \theta_2 =
-\theta_{12}\), \(\cos(\theta_1 + \theta_2) = c_{12}\) e assim por diante. Para
-\(i = 1, 2, 3\) as matrizes $A_i$ são calculadas com o auxílio da
-equação~\ref{eq:dh-matrix}:
+juntas ($q_i = \theta_i$). Para \(i = 1, 2, 3\) as matrizes $A_i$ são calculadas 
+com o auxílio da equação~\ref{eq:dh-matrix}:
 
 \begin{figure}
     \centering
@@ -194,7 +197,9 @@ equação~\ref{eq:dh-matrix}:
     \end{bmatrix}
 \end{equation}
 
-Já para as matrizes \(T^0_i\), utilizamos a equação~\ref{eq:fkine}:
+onde \(\theta_1 + \theta_2 = \theta_{12}\), \(\cos(\theta_1 + \theta_2) = c_{12}\) e assim por diante. 
+
+Já para as matrizes \(T^0_i\), utiliza-se a equação~\ref{eq:fkine}:
 
 \begin{equation}
     \mathbf{T}^0_1 = \mathbf{A}_1
@@ -228,13 +233,12 @@ relação ao frame da base é dada pela soma dos ângulos das juntas: $\psi =
 
 \section{Cinemática Diferencial}
 
-Na seção anterior vimos como podemos estabelecer uma relação entre a
+Na seção anterior foi apresentado como podemos estabelecer uma relação entre a
 configuração de um manipulador com $n$ juntas e a pose do efetuador final no
-espaço SE3. Nesta seção iremos ver como a matriz jacobiana, uma generalização 
-da derivada para o caso multidimensional, é responsável por estabelecer um 
-mapeamento linear entre um vetor de velocidades no espaço das juntas com a 
-velocidade do efetuador no espaço de trabalho. Por fim, iremos analisar o 
-problema da cinemática inversa diferencial, proporcionando a geração de trajetórias 
+espaço SE3. Esta seção introduz o conceito da matriz jacobiana do manipulador,
+responsável por estabelecer um mapeamento linear entre um vetor de velocidades no espaço
+ das juntas com a velocidade do efetuador no espaço de trabalho. A seção termina analisando o 
+problema da cinemática inversa diferencial o qual proporciona a execução de trajetórias 
 cartesianas, no espaço de trabalho do manipulador.
 
 \subsection{A Jacobiana do Manipulador}
@@ -254,7 +258,8 @@ a transformação homogênea que expressa a pose do efetuador final com relaçã
     q_1 & \cdots & q_n
 \end{bmatrix}^\top\).
 
-Buscamos estabelecer relações da seguinte forma:
+As relações entre as componentes da velocidade do efetuador final
+são estabelecidas da seguinte forma:
 
 \begin{align}
     v_n^0 = J_v \dot{q} \\
@@ -263,7 +268,7 @@ Buscamos estabelecer relações da seguinte forma:
 
 onde \(v_n^0\) e \(\omega_n^0\) expressam respectivamente as velocidades linear
 e angular do efetuador final e \(J_v\), \(J_\omega\) são matrizes de dimensão
-\(3 \times n\). De maneira mais compacta, podemos escrever
+\(3 \times n\). De maneira mais compacta, pode-se escrever
 
 \begin{equation}
     \xi = J \dot{q}
@@ -364,7 +369,7 @@ onde as termos envolvidos são:
                                                                   \end{bmatrix}
 \end{align*}
 
-Desenvolvendo as expressões acima, obtemos:
+Desenvolvendo as expressões acima, obtém-se:
 
 \begin{equation}
     J(q) = \begin{bmatrix}
@@ -406,7 +411,7 @@ uma velocidade arbitrária se todas as colunas de \(J\) forem linearmente
 independentes, ou seja, quando o posto da matriz jacobiana for igual a \(6\).
 Para uma matriz \(J \in \mathbb{R}^{6 \times n}\) é sempre verdade que
 \(\text{posto}(J) \leq \min(6, n)\). Com efeito, no caso do manipulador planar
-3R tínhamos \(n = 3\) e desse modo \(\text{posto}(J) \leq 3\) evidenciando o
+3R têm-se \(n = 3\) e desse modo \(\text{posto}(J) \leq 3\) evidenciando o
 fato de que o manipulador não consegue desenvolver qualquer velocidade no
 espaço de trabalho.
 
@@ -428,7 +433,7 @@ diversos motivos, entre eles~\cite{spong_robot_2020}:
 
 Quando a matriz jacobiana é quadrada, podemos usar o fato de que seu
 determinante se anula em configurações singulares, contudo ainda assim o
-problema de determinar o conjunto de configurações é difícil, pois precisamos
+problema de determinar o conjunto de configurações é difícil, uma vez que é necessário
 resolver a equação
 
 \begin{equation}
@@ -436,7 +441,7 @@ resolver a equação
 \end{equation}
 
 que geralmente envolve termos com alto grau de não linearidade. Nas próximas
-seções, examinaremos técnicas que viabilizam um esquema de controle capaz de se
+seções, serão examinadas técnicas que viabilizam um esquema de controle capaz de se
 afastar de configurações singulares ao explorar a redundância presente em
 manipuladores planares. Isso se refere a casos em que a matriz Jacobiana é
 retangular, apresentando mais velocidades no espaço das juntas (colunas) do que
@@ -445,14 +450,14 @@ velocidades possíveis no espaço de trabalho (linhas).
 \subsection{Cinemática Inversa Diferencial}
 
 Se a matriz jacobiana definida na equação (\ref{eq:jacobian-mapping}) é
-quadrada e não singular, podemos resolver o problema de cinemática inversa
+quadrada e não singular, o problema de cinemática inversa pode ser resolvido
 através da simples inversão da mesma:
 
 \begin{equation}\label{eq:resolved-rate}
     \dot{q} = J^{-1}(q) \xi
 \end{equation}
 
-Se a configuração inicial do manipulador \(q(0)\) é conhecida as posições das
+Se a configuração inicial do manipulador \(q(0)\) é conhecida, as posições das
 juntas podem ser calculadas integrando as velocidades no tempo:
 
 \begin{equation}
@@ -472,18 +477,18 @@ t_k + \Delta t\):
 onde \(\delta_t\) é um intervalo de integração apropriado (tempo de
 amostragem).
 
-O esquema de controle descrito acima é conhecido como \emph{Resolved Rate Motion Control} (RRMC), o qual consegue de 
-maneira simples e elegante o solucionar o problema de gerar movimentos no efetuador final de velocidade constante sem recorrer à
-soluções numéricas ou analíticas para o cálculo da cinemática inversa~\cite{corke_robotics_2023}. 
-Tal esquema é útil na geração de trajetórias cartesianas no espaço de trabalho,
-conhecidas como trajetórias cartesianas, uma vez que a componente translacional
-da velocidade do efetuador final tem direção constante ao longo de todo o
-trajeto pode ser tratada de maneira independente da componente rotacional.
+O esquema de controle descrito acima é conhecido como \emph{
+    Resolved Rate Motion Control} (RRMC), o qual consegue de 
+maneira simples e elegante o solucionar o problema de gerar movimentos no efetuador 
+final de velocidade constante sem recorrer à soluções numéricas ou analíticas para 
+o cálculo da cinemática inversa~\cite{corke_robotics_2023}. 
+Tal esquema é útil na geração de trajetórias contínuas e suaves no espaço de trabalho,
+conhecidas como trajetórias cartesianas.
 
-Como exemplo, ainda considerando o manipulador planar 3R, poderíamos apenas
-especificar um vetor de velocidades \(\xi\) que leva em conta as componentes do
+Como exemplo, ainda considerando o manipulador planar 3R, ao especificar apenas
+um vetor de velocidades \(\xi\) que leva em conta as componentes do
 plano \(xy\) da velocidade linear e a componente de rotação angular em torno do
-eixo \(z\) de modo que:
+eixo \(z\), têm-se que:
 
 \begin{equation}
     \xi = \begin{bmatrix}
@@ -503,8 +508,8 @@ Assim a matriz jacobiana se torna livre das linhas que possuem apenas zeros:
     \end{bmatrix}
 \end{equation}
 
-e contanto que não seja singular pode ser facilmente invertida. Desse modo, se
-quisermos por exemplo, gerar um movimento retilíneo no efetuador final paralelo
+e contanto que não seja singular pode ser facilmente invertida. Como exemplo, para gerar 
+um movimento retilíneo no efetuador final paralelo
 ao eixo \(x\) do plano \(xy\) com velocidade constante, basta tomar \(\xi = \begin{bmatrix}
     v_x & 0 & 0
 \end{bmatrix}^\top\).
@@ -515,19 +520,19 @@ Manipuladores cinematicamente redundantes, são aqueles que possuem mais juntas
 do que o número estritamente necessário para a execução de uma determinada
 tarefa. Este excedente de juntas confere a esses manipuladores um nível
 aumentado de destreza, permitindo-lhes navegar em ambientes complexos com maior
-flexibilidade. Nesta seção vamos introduzir uma solução geral para o problema
-da cinemática inversa diferencial quando o matriz jacobiana é retangular,
+flexibilidade. Esta seção introduz uma solução geral para o problema
+da cinemática inversa diferencial quando a matriz jacobiana é retangular,
 envolvendo o conceito da sua \emph{pseudo-inversa}. Em seguida, utilizando a
-decomposição em valores singulares de \(J\) iremos fornecer uma descrição
+decomposição em valores singulares de \(J\) obtém-se uma descrição
 geométrica e qualitativa da destreza associada à uma dada configuração através
-dos conceitos do elipsoide e da medida de manipulabilidade. Por fim, vamos ver
-como podemos utilizar a solução geral fornecida pela pseudo-inversa para
+dos conceitos do elipsoide e da medida de manipulabilidade. Ao final da seção,
+utiliza-se a solução geral fornecida pela pseudo-inversa para
 otimizar diferentes índices de performance com o objetivo de evitar
 singularidades e limites mecânicos das juntas.
 
 \subsection{Pseudo-Inversa da Jacobiana}
 
-Num manipulador cinematicamente redundante, a matriz jacobiana de dimensão \(m
+Em um manipulador cinematicamente redundante, a matriz jacobiana de dimensão \(m
 \times n\) será retangular (\(m < n\)). Isso significa que \(J\) possui mais
 colunas do que linhas e nesse caso existem infinitas soluções para o problema
 de cinemática inversa diferencial. Uma solução viável é formular o problema como 
@@ -554,7 +559,7 @@ onde a matriz \(J^\dag\) é conhecida como \emph{matriz inversa de Moore-Penrose
 
 Vale notar que o termo \(I_n - J^\dag J\) atua projetando o vetor \(\dot{q_0}\)
 no espaço nulo de \(J\). Com efeito, aplicando a jacobiana à esquerda na
-equação (\ref{eq:pseudo-inverse}) temos:
+equação (\ref{eq:pseudo-inverse}):
 
 \begin{align*}
     J \dot{q} & = J J^\dag \xi + J (I_n - J^\dag J) \dot{q_0}                                   \\
@@ -570,7 +575,7 @@ que que não afetam a velocidade \(\xi\) do efetuador final.
 
 Uma maneira de investigar mais a fundo o mapeamento linear estabelecido pela
 jacobiana é entender como a mesma ``deforma'' o vetor \(\dot{q}\) de entradas
-para produzir o vetor \(\xi\) de saídas. Para isso, podemos considerar o disco
+para produzir o vetor \(\xi\) de saídas. Para isso, considerando o disco
 formado pelo conjunto de velocidades com norma unitária:
 
 \begin{equation}
@@ -590,7 +595,7 @@ Substituindo a solução de menor norma \(\dot{q} = J^\dag \xi\):
 A equação (\ref{eq:manipulability-ellipsoid}) define uma região no espaço de
 trabalho conhecido como \emph{elipsoide de manipulabilidade} que representa
 todas as velocidades possíveis do efetuador final para uma dada configuração do
-manipulador. Esse fato pode ser verificado ao considerarmos a
+manipulador. Esse fato pode ser verificado considerando-se a
 decomposição em valores singulares (SVD) da jacobiana \(J = U \Sigma V^\top\):
 
 \begin{align}\label{eq:manipulability-ellipsoid-svd}
@@ -600,7 +605,7 @@ decomposição em valores singulares (SVD) da jacobiana \(J = U \Sigma V^\top\):
     \left\Vert \dot{q} \right\Vert^2 & = {(U^\top \xi)}^\top \Sigma^{-2} (U^\top \xi)
 \end{align}
 
-onde sabemos que \(U\) e \(V\) são matrizes ortogonais, isto é \(U^{-1} =
+onde \(U\) e \(V\) são matrizes ortogonais, isto é \(U^{-1} =
 U^\top\) e \(V^{-1} = V^\top\). Além disso a matriz
 
 \begin{equation}
@@ -613,8 +618,8 @@ U^\top\) e \(V^{-1} = V^\top\). Além disso a matriz
 \end{equation}
 
 é diagonal e os termos que \(\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_m\) são os valores
-singulares de \(J\). Por fim, ao fazermos a substituição \(w = U^\top \xi\) podemos reescrever a equação
-(\ref{eq:manipulability-ellipsoid-svd}) como:
+singulares de \(J\). Por fim, substituindo \(w = U^\top \xi\) a equação
+(\ref{eq:manipulability-ellipsoid-svd}) é reescrita como:
 
 \begin{equation}
     w^\top \Sigma^{-2} w = \sum_{i=1}^m{\frac{{w_i}^2}{{\sigma_i}^2}} \leq 1
@@ -631,8 +636,8 @@ singulares de \(J\):
     \mu = \sigma_1 \sigma_2 \cdots \sigma_m
 \end{equation}
 
-que é proporcional ao volume do elipsoide de manipulabilidade. Ao passo que nos
-aproximamos de uma singularidade, um ou mais dos valores singulares de \(J\) se
+que é proporcional ao volume do elipsoide de manipulabilidade. Próximo a 
+uma singularidade, um ou mais dos valores singulares de \(J\) se
 aproximam de zero, reduzindo o volume do elipsoide e consequentemente a
 destreza do manipulador. Isso pode ser visualizado na
 figura~\ref{fig:manipulability-ellipsoid} onde para o braço planar 3R, o
@@ -648,8 +653,8 @@ aproximamos do limite do espaço de trabalho.
 
 \subsection{Resolução de Redundância}
 
-Ao estabelecermos a solução geral dada pela equação (\ref{eq:pseudo-inverse}),
-dissemos que o vetor \(\dot{q_0}\) pode ser escolhido arbitrariamente. Uma
+A solução geral dada pela equação (\ref{eq:pseudo-inverse}),
+introduz o termo dado pelo vetor \(\dot{q_0}\) pode ser escolhido arbitrariamente. Uma
 possibilidade é tomá-lo de forma a maximizar algum índice de performance \(w\),
 para isso escolhendo o vetor na direção do gradiente~\cite{siciliano_robotics_2009}:
 
@@ -693,7 +698,7 @@ que se \(k_0\) for muito grande isso pode a uma diminuição ou até
  mesmo não convergência do valor de \(w\) devido a oscilações em torno do ponto 
  de máximo local.
 
-No próximo capítulo, iremos aplicar os conceitos apresentados até agora na
+O próximo capítulo, aplica os conceitos apresentados até agora na
 concepção de um ambiente simulado para um manipulador redundante com cinco
 graus de liberdade. O objetivo principal será a execução de trajetórias
 cartesianas no espaço de trabalho \(\mathcal{T} \in \text{SE}(3)\) que levam

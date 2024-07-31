@@ -12,11 +12,11 @@ a diferentes restrições cinemáticas.
 No primeiro cenário, a configuração do manipulador muda para trazer algumas posições 
 das juntas o mais próximo possível de zero, enquanto a restrição primária imposta pela velocidade 
 do efetuador final \(\xi = 0\) mantém a configuração final do manipulador numa solução particular, 
-como podemos ver na figura \ref*{fig:exp1-joint-states}. A medida que aumentamos o ganho \(k_0\), a 
-configuração do manipulador converge mais rapidamente para a solução final e na figura \ref*{fig:exp1-metric} 
-podemos ver os valores menores da distância para os limites mecânicos das juntas sendo obtidos, ao custo 
+como pode ser visto na figura \ref*{fig:exp1-joint-states}. A medida que aumentamos o ganho \(k_0\), a 
+configuração do manipulador converge mais rapidamente para a solução final e na figura~\ref*{fig:exp1-metric}
+observa-se que valores menores do módulo da distância para os limites mecânicos das juntas \(w_d\) são obtidos, ao custo 
 de um valor de erro ligeiramente maior, como indicado na tabela \ref*{tab:scores-exp1}. Por fim, a figura 
-\ref*{fig:exp1-position} mostra a posição do efetuador final constante ao longo de todo o experimento, 
+\ref*{fig:exp1-position} mostra a posição do efetuador final constante ao longo de toda a simulação, 
 mostrando que a restrição primária não é violada.
 
 \begin{figure}
@@ -41,7 +41,7 @@ mostrando que a restrição primária não é violada.
     \centering
     \begin{tabular}{ccc}
         \toprule
-        \( k_0 \) & \( I(w) \)  & Erro posição (m) \\
+        \( k_0 \) & \( I(w_d) \)  & Erro posição (m) \\
         \midrule
         0  & \( 0.8729 \) & \( \textbf{1.8535e-06} \) \\
         200  & \( 0.4829 \) & \( 0.0013 \) \\
@@ -49,14 +49,14 @@ mostrando que a restrição primária não é violada.
         800  & \( \textbf{0.4435} \) & \( 0.0048 \) \\
         \bottomrule
     \end{tabular}
-    \caption{Valores de desempenho obtidos na execução dos experimentos do primeiro cenário.}
+    \caption{Valores de desempenho obtidos na execução das simulações do primeiro cenário.}
     \label{tab:scores-exp1}
 \end{table}
 
 \section{Cenário 2}
 	
 No segundo cenário, com a introdução de uma velocidade inicial não nula do efetuador final, isto é \(||\xi|| > 0 \), 
-a manipulabilidade muda ao longo da execução da trajetória, aproximando-se de um valor mínimo no seu final (figura \ref*{fig:exp2-metric}). 
+a manipulabilidade \(w_m\) muda ao longo da execução da trajetória, aproximando-se de um valor mínimo no seu final (figura \ref*{fig:exp2-metric}). 
 A resolução de redundância atualiza a configuração do manipulador de modo manter a manipulabilidade o mais 
 alta possível, sem violar a restrição primária.
 
@@ -75,11 +75,11 @@ alta possível, sem violar a restrição primária.
         \caption{Configuração final para \(k_0 = 800\).}
         \label{fig:subfig2}
     \end{subfigure}
-    \caption{Configuração final do manipulador nos experimentos do segundo cenário (métrica distância das juntas).}
-    \label{fig:mainfigure}
+    \caption{Configuração final do manipulador nas simulações do segundo cenário (métrica distância das juntas).}
+    \label{fig:final-configuration}
 \end{figure}
 
-Observamos novamente que o efeito de introduzir valores crescentes do ganho afeta o erro de posição 
+Um ponto interessante a se observar é como o efeito de introduzir valores crescentes do ganho afeta o erro de posição, 
 com um pequeno \emph{trade-off} entre a otimização da métrica e a precisão no controle da posição 
 do efetuador final (tabelas \ref*{tab:scores-exp2} e \ref*{tab:scores-exp3}), tendo em vista o aumento das 
 velocidades das juntas. Esse fenômeno pode ser melhor observado nas figuras \ref*{fig:exp3-joint-states} e 
@@ -88,7 +88,9 @@ e o erro se mantém maior a medida que o ganho \(k_0\) aumenta. Isso pode ser ex
 de que a métrica de desempenho, nesse caso a distância das juntas (figura \ref*{fig:exp3-metric}), é otimizada como 
 um objetivo secundário à restrição imposta por \(\xi\), e a escolha de trajetórias onde os valores da métricas estão 
 muito distantes do valor ótimo, acabam tornando o processo de otimização mais difícil, necessitando assim um valor 
-de \(k_0\) maior para convergir para a solução ótima.
+de \(k_0\) maior para convergir para a solução ótima. Tal solução é demonstrada na 
+figura~\ref{fig:final-configuration}, onde vemos a configuração final do manipulador, para o caso onde não há otimização 
+da métrica (\(k_0=0\)) e quando a métrica é otimizada na direção do seu gradiente (\(k_0=800\)).
 
 \begin{figure}
 	\centering
@@ -100,7 +102,7 @@ de \(k_0\) maior para convergir para a solução ótima.
     \centering
     \begin{tabular}{ccc}
         \toprule
-        \( k_0 \) & \( I(w) \)  & Erro posição (m) \\
+        \( k_0 \) & \( I(w_m) \)  & Erro posição (m) \\
         \midrule
         0  & \( 0.0507 \) & \( \textbf{0.0138} \) \\
         2000  & \( 0.0597 \) & \( 0.0150 \) \\
@@ -108,7 +110,7 @@ de \(k_0\) maior para convergir para a solução ótima.
         8000  & \( \textbf{0.0609} \) & \( 0.0149 \) \\
         \bottomrule
     \end{tabular}
-    \caption{Valores de desempenho obtidos na execução dos experimentos do segundo cenário.}
+    \caption{Valores de desempenho obtidos na execução das simulações do segundo cenário.}
     \label{tab:scores-exp2}
 \end{table}
 
@@ -142,6 +144,6 @@ de \(k_0\) maior para convergir para a solução ótima.
         800  & \( \textbf{1.3251} \) & \( 0.0418 \) \\
         \bottomrule
     \end{tabular}
-    \caption{Valores de desempenho (métrica distância das juntas) obtidos na execução dos experimentos no segundo cenário.}
+    \caption{Valores de desempenho (métrica distância das juntas) obtidos na simulações no segundo cenário.}
     \label{tab:scores-exp3}
 \end{table}
