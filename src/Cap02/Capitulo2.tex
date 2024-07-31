@@ -668,7 +668,7 @@ Uma escolha natural para o índice de performance \(w\) é a \emph{medida de
     manipulabilidade de Yoshikawa}~\cite{yoshikawa1983}:
 
 \begin{equation}\label{eq:yoshikawa}
-    w(q) = \sqrt{\det(J(q){J(q)}^\top)}
+    w_m(q) = \sqrt{\det(J(q){J(q)}^\top)}
 \end{equation}
 
 onde vale ressaltar que é equivalente àquela definida na a equação
@@ -679,7 +679,7 @@ Uma alternativa ao cálculo da \ref{eq:yoshikawa} é utilizar uma métrica mais 
 \emph{distância para os limites mecânicos das juntas} dada por:
 
 \begin{equation}
-    w(q) = -\frac{1}{2n} \sum_{i=1}^{n}{{\left(\frac{q_i - \bar{q_i}}{q_{iM} - q_{im}}\right)}^2}
+    w_d(q) = -\frac{1}{2n} \sum_{i=1}^{n}{{\left(\frac{q_i - \bar{q_i}}{q_{iM} - q_{im}}\right)}^2}
 \end{equation}
 
 Ao maximar tal índice, espera-se que o manipulador mantenha-se próximo ao ponto
@@ -688,7 +688,7 @@ limite do espaço de trabalho. Além disso, o vetor gradiente pode ser calculado
 de maneira analítica onde cada coordenada é dada por:
 
 \begin{equation}\label{eq:joint-distance-grad}
-    \frac{\partial w(q)}{\partial q_i} = -\frac{1}{n} \frac{q_i - \bar{q_i}}{{(q_{iM} - q_{im})}^2}
+    \frac{\partial w_d(q)}{\partial q_i} = -\frac{1}{n} \frac{q_i - \bar{q_i}}{{(q_{iM} - q_{im})}^2}
 \end{equation}
 
 Outro ponto a salientar é que a escolha do tamanho do passo \(k_0\) é crucial
