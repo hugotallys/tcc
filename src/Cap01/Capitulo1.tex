@@ -1,8 +1,8 @@
 \chapter{Introdução}\label{cap:introduction}
 
-A redundância cinemática na robótica refere-se ao uso de graus de liberdade (DOF) adicionais além do mínimo necessário para executar uma
+A redundância cinemática na robótica refere-se ao uso de graus de liberdade, em inglês \emph{degrees of freedom} (DoF) adicionais além do mínimo necessário para executar uma
 tarefa específica. Em robôs industriais e manipuladores, singularidades cinemáticas ocorrem quando a configuração do robô resulta na perda
-de um ou mais DOFs, reduzindo sua capacidade de movimento. De maneira mais precisa, isso significa que há alguma direção (ou subespaço) 
+de um ou mais DoFs, reduzindo sua capacidade de movimento. De maneira mais precisa, isso significa que há alguma direção (ou subespaço) 
 no espaço cartesiano ao longo da qual é impossível mover o efetuador final, independentemente das velocidades empenhadas nas 
 juntas~\cite{craig2004}. 
 
@@ -14,10 +14,10 @@ a precisão e aumentar a capacidade de evasão de obstáculos.
 
 Recentemente,~\cite{li2023pseudo} propuseram um novo esquema de \emph{Obstacle avoidance} (OA) para manipuladores redundantes 
 baseado em na pseudo-inversa da matriz jacobiana no nível das acelerações das juntas, demonstrando a viabilidade do método através de simulações 
-com o manipulador robótico PA10 o qual possui \(7\) DOFs. Por outro lado,~\cite{kuri2023som}
-abordaram uma técnica de controle inteligente para um manipulador robótico espacial com 5 DOFs para executar
+com o manipulador robótico PA10 o qual possui \(7\) DoFs. Por outro lado,~\cite{kuri2023som}
+abordaram uma técnica de controle inteligente para um manipulador robótico espacial com 5 DoFs para executar
 trajetórias tridimensionais desejadas (linha, circular e elíptica) enquanto resolve a redundância 
-(evitação dos limites das juntas) mostrando que a depender da tarefa, mesmo para manipuladores com um número menor de DOFs, 
+(evitação dos limites das juntas) mostrando que a depender da tarefa, mesmo para manipuladores com um número menor de DoFs, 
 a redundância pode ser explorada para melhorar o desempenho do robô.
 
 O trabalho de \cite{ancona2017} validou técnicas de resolução de redundância em diversos cenários, destacando a importância da escolha do critério de desempenho
@@ -38,7 +38,7 @@ A abordagem tradicional no projeto de manipuladores teve como foco principal a m
 utilizando o número mínimo de juntas necessárias para uma executar uma determinada tarefa levando, por exemplo, ao
 desenvolvimento dos robôs \emph{Selective Compliance Assembly Robot Arm} (SCARA) para operações de \emph{pick-and-place}~\cite{siciliano_springer_2008}.
 No entanto, essa abordagem  minimalista apresenta uma série de limitações em aplicações do mundo real, onde fatores como
-limites de juntas, singularidades e obstáculos no espaço de trabalho estão presentes. Ao ter mais DOFs
+limites de juntas, singularidades e obstáculos no espaço de trabalho estão presentes. Ao ter mais DoFs
 do que o estritamente necessário, os manipuladores redundantes podem alcançar maior destreza e versatilidade, tornando-os
 mais adequados para ambientes complexos e dinamicamente mutáveis.
 

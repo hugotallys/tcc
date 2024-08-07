@@ -132,8 +132,8 @@ o simulador computar o modelo dinâmico ao longo do tempo, foram fornecidas as
 informações de massa do servo-motor (disponível na especificação do fabricante)
 e no caso dos soquetes, a densidade do material PLA foi utilizada para estimar
 sua massa com base no volume da geometria modelada (conjunto de caixas). Além
-disso, a definição das matrizes de inércia ficou por conta do próprio
-simulador, que estima seu valor com base na massa fornecida e na posição e
+disso, a definição das matrizes de inércia é estimada pelo próprio
+simulador com base na massa fornecida e na posição e
 orientação das primitivas utilizadas durante a modelagem. Vale ressaltar que a
 adição das propriedades dinâmicas tem caráter apenas de aproximação de um cenário
 mais real, tendo em vista que o esquema de controle proposto atua apenas na
@@ -281,7 +281,7 @@ diferenças finitas, considerando um passo \(h\) suficientemente pequeno.
         \EndProcedure\end{algorithmic}
 \end{algorithm}
 
-\subsection*{Simulações}
+\section{Simulações}
 
 As simulações focaram na avaliação da resolução de redundância
 sob valores variados do ganho (\(k_0\)) e envolveram dois cenários. No primeiro

@@ -9,14 +9,14 @@ a diferentes restrições cinemáticas.
 
 \section{Cenário 1}
 
-No primeiro cenário, a configuração do manipulador muda para trazer algumas posições 
+No primeiro cenário, o controlador atualiza a configuração do manipulador de modo a trazer algumas posições 
 das juntas o mais próximo possível de zero, enquanto a restrição primária imposta pela velocidade 
 do efetuador final \(\xi = 0\) mantém a configuração final do manipulador numa solução particular, 
-como pode ser visto na figura \ref*{fig:exp1-joint-states}. A medida que aumentamos o ganho \(k_0\), a 
-configuração do manipulador converge mais rapidamente para a solução final e na figura~\ref*{fig:exp1-metric}
+como pode ser visto na Figura \ref*{fig:exp1-joint-states}. Conforme aumenta-se o ganho \(k_0\), a 
+configuração do manipulador converge mais rapidamente para a solução ótima e na figura~\ref*{fig:exp1-metric}
 observa-se que valores menores do módulo da distância para os limites mecânicos das juntas \(w_d\) são obtidos, ao custo 
-de um valor de erro ligeiramente maior, como indicado na tabela \ref*{tab:scores-exp1}. Por fim, a figura 
-\ref*{fig:exp1-position} mostra a posição do efetuador final constante ao longo de toda a simulação, 
+de um valor de erro ligeiramente maior, como indicado na tabela \ref*{tab:scores-exp1}. Por fim, a Figura 
+\ref*{fig:exp1-position} mostra as três componentes de posição do efetuador final constantes ao longo de toda a simulação, 
 mostrando que a restrição primária não é violada.
 
 \begin{figure}
@@ -49,7 +49,7 @@ mostrando que a restrição primária não é violada.
         800  & \( \textbf{0.4435} \) & \( 0.0048 \) \\
         \bottomrule
     \end{tabular}
-    \caption{Valores de desempenho obtidos na execução das simulações do primeiro cenário.}
+    \caption{Valores absolutos de \(w_d\) obtidos na execução das simulações do primeiro cenário.}
     \label{tab:scores-exp1}
 \end{table}
 
@@ -57,8 +57,7 @@ mostrando que a restrição primária não é violada.
 	
 No segundo cenário, com a introdução de uma velocidade inicial não nula do efetuador final, isto é \(||\xi|| > 0 \), 
 a manipulabilidade \(w_m\) muda ao longo da execução da trajetória, aproximando-se de um valor mínimo no seu final (figura \ref*{fig:exp2-metric}). 
-A resolução de redundância atualiza a configuração do manipulador de modo manter a manipulabilidade o mais 
-alta possível, sem violar a restrição primária.
+A resolução de redundância atualiza a configuração do manipulador de modo maximizar a manipulabilidade sem violar a restrição primária.
 
 \begin{figure}[ht]
     \centering
@@ -84,11 +83,11 @@ com um pequeno \emph{trade-off} entre a otimização da métrica e a precisão n
 do efetuador final (tabelas \ref*{tab:scores-exp2} e \ref*{tab:scores-exp3}), tendo em vista o aumento das 
 velocidades das juntas. Esse fenômeno pode ser melhor observado nas figuras \ref*{fig:exp3-joint-states} e 
 \ref*{fig:exp3-error}, onde a velocidade das juntas aumenta significativamente ao longo da execução da trajetória, 
-e o erro se mantém maior a medida que o ganho \(k_0\) aumenta. Isso pode ser explicado pelo fato 
-de que a métrica de desempenho, nesse caso a distância das juntas (figura \ref*{fig:exp3-metric}), é otimizada como 
-um objetivo secundário à restrição imposta por \(\xi\), e a escolha de trajetórias onde os valores da métricas estão 
-muito distantes do valor ótimo, acabam tornando o processo de otimização mais difícil, necessitando assim um valor 
-de \(k_0\) maior para convergir para a solução ótima. Tal solução é demonstrada na 
+e o erro se mantém maior conforme o ganho \(k_0\) aumenta. Isso pode ser explicado pelo fato 
+de que as métricas de desempenho (no caso da Figura \ref*{fig:exp3-metric} \(w_d\)) são otimizadas como 
+um objetivo secundário em relação à execução da trajetória. Desse modo, a escolha de trajetórias que minimizam 
+o critério de desempenho acabam tornando o processo de otimização mais difícil, necessitando assim um valor 
+de \(k_0\) maior para convergir para uma solução ótima. Tal solução é demonstrada na 
 figura~\ref{fig:final-configuration}, onde vemos a configuração final do manipulador, para o caso onde não há otimização 
 da métrica (\(k_0=0\)) e quando a métrica é otimizada na direção do seu gradiente (\(k_0=800\)).
 

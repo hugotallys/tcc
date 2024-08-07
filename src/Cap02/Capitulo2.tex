@@ -1,5 +1,16 @@
 \chapter{Fundamentação teórica}\label{cap:background}
 
+Este capítulo aborda diversos tópicos fundamentais para a compreensão da técnica de resolução de 
+redundância utilizada ao longo do trabalho. Inicialmente, é discutido o uso de transformações homogêneas para
+estabelecer a relação entre dois \emph{frames} da cadeia cinemática, dada por um deslocamento rígido no 
+espaço de trabalho de um manipulador. Dada uma configuração do manipulador no espaço das juntas, calculamos a pose do efetuador 
+final relativa ao \emph{frame} da base, resolvendo assim o problema de cinemática direta. Em seguida, a cinemática diferencial 
+é introduzida para relacionar velocidades no espaço de configuração do manipulador com sua velocidade no espaço de trabalho, 
+utilizando a matriz jacobiana. Em posse do mapeamento estabelecido para jacobiana torna-se possível resolver o problema da 
+cinemática inversa diferencial onde são discutidos tópicos referentes às singularidades cinemáticas que surgem quando a 
+matriz jacobiana não admite inversa e como a sua pseudo-inversa pode ser utilizada, em manipuladores redundantes, para a 
+escolha soluções ótimas no espaço de configuração do manipulador.
+
 \section{Representação de Poses no espaço}
 
 A representação de poses no espaço na robótica envolve o uso de sistemas de 
@@ -26,7 +37,7 @@ translações em uma única representação, facilitando a descrição de
 deslocamentos rígidos no espaço tridimensional. Um deslocamento rígido 
 é definido por um par ordenado \((R, d)\), onde \(R\) é uma matriz de 
 rotação em \(SO(3)\) e \(d\) é um vetor de translação em \(\mathbb{R}^3\). Observando
-a figura \ref{fig:frames}, podemos ver que a posição de um ponto \(p\) com relação
+a Figura \ref{fig:frames}, podemos ver que a posição de um ponto \(p\) com relação
 a um frame de referência \(o_0 x_0 y_0 z_0\) pode ser expressa como:
 
 \begin{equation}\label{eq:rigid-motion}
@@ -158,7 +169,7 @@ Um braço planar é um tipo de manipulador serial cujo espaço de trabalho se
 limita a um plano. A figura~\ref{fig:3r-planar-arm} mostra um braço planar do
 tipo 3R, o qual possui três elos e três juntas de revolução acoplados em série.
 A escolha da colocação do frame da base \(o_0x_0y_0z_0\) é totalmente
-arbitrária e ao tomar como indicado na figura (com o eixo \(z\) apontando para
+arbitrária e ao tomar como indicado na Figura (com o eixo \(z\) apontando para
 fora do papel) a fixação dos frames subsequentes na cadeia cinemática fica
 restrita a convenção de Denavit-Hartenberg adotada. A tabela DH para esse
 manipulador é dada por:
@@ -244,14 +255,12 @@ cartesianas, no espaço de trabalho do manipulador.
 \subsection{A Jacobiana do Manipulador}
 
 Dado um manipulador com $n$ juntas vamos considerar
-
 \begin{equation}
     T_{n}^{0}(q) = \begin{bmatrix}
         R_{n}^{0}(q) & o_{n}^{0}(q) \\
         0            & 1
     \end{bmatrix}
 \end{equation}
-
 a transformação homogênea que expressa a pose do efetuador final com relação ao
 \emph{frame} da base que, como já vimos, é função apenas da configuração \(q =
 \begin{bmatrix}
@@ -260,22 +269,17 @@ a transformação homogênea que expressa a pose do efetuador final com relaçã
 
 As relações entre as componentes da velocidade do efetuador final
 são estabelecidas da seguinte forma:
-
 \begin{align}
     v_n^0 = J_v \dot{q} \\
     \omega_n^0 = J_\omega \dot{q}
 \end{align}
-
 onde \(v_n^0\) e \(\omega_n^0\) expressam respectivamente as velocidades linear
-e angular do efetuador final e \(J_v\), \(J_\omega\) são matrizes de dimensão
+e angular do efetuador final relativas ao \emph{frame} da base e \(J_v\), \(J_\omega\) são matrizes de dimensão
 \(3 \times n\). De maneira mais compacta, pode-se escrever
-
 \begin{equation}
     \xi = J \dot{q}
 \end{equation}
-
-onde teremos:
-
+onde:
 \begin{equation}
     \xi = \begin{bmatrix}
         v_n^0 \\
@@ -329,7 +333,7 @@ onde a i-ésima coluna \(J_{\omega_i}\) é dada por:
 
 Note que o cálculo da jacobiana torna-se possível apenas com o conhecimento da
 função de cinemática direta \(T_n^0\) mostrando-se uma maneira eficiente para calcular 
-não so a velocidade do efetuador final mas também a velocidade de qualquer ponto da 
+não só a velocidade do efetuador final mas também a velocidade de qualquer ponto da 
 estrutura cinemática do manipulador.
 
 Como exemplo, considere o manipulador planar 3R introduzido na seção anterior.
@@ -385,7 +389,7 @@ Desenvolvendo as expressões acima, obtém-se:
 Note que o manipulador planar não provoca qualquer translação ao longo do eixo
 \(z\) uma vez que qualquer contribuição de \(J_{v_i}\) é nula na terceira
 componente. Além disso, a única componente de rotação influenciada pelo
-movimento das juntas é a rotação em torno também do eixo do eixo \(z\)
+movimento das juntas é a rotação em torno também do eixo \(z\)
 evidenciado pela terceira componente de \(J_{\omega_i}\) igual a 1.
 
 \subsection{Singularidades}
@@ -412,8 +416,8 @@ independentes, ou seja, quando o posto da matriz jacobiana for igual a \(6\).
 Para uma matriz \(J \in \mathbb{R}^{6 \times n}\) é sempre verdade que
 \(\text{posto}(J) \leq \min(6, n)\). Com efeito, no caso do manipulador planar
 3R têm-se \(n = 3\) e desse modo \(\text{posto}(J) \leq 3\) evidenciando o
-fato de que o manipulador não consegue desenvolver qualquer velocidade no
-espaço de trabalho.
+fato de que o manipulador não consegue desenvolver uma velocidade arbitrária com
+todas as componente translacionais e rotacionais.
 
 Configurações paras as quais o posto da matriz jacobiana é menor que o máximo
 possível (em inglês \emph{rank deficiency}) são denominadas de
